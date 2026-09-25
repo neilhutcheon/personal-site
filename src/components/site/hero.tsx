@@ -69,7 +69,7 @@ export function Hero() {
       />
       <div aria-hidden className="absolute -right-24 top-10 -z-10 size-[26rem] rounded-full bg-brass/10 blur-3xl" />
 
-      <div className="mx-auto grid w-full max-w-6xl items-center gap-14 px-5 py-16 sm:px-8 lg:grid-cols-[1.25fr_1fr]">
+      <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-5 py-10 sm:px-8 sm:py-16 lg:gap-14 lg:grid-cols-[1.25fr_1fr]">
         <div>
           <motion.p
             initial={{ opacity: 0, y: 12 }}
@@ -179,7 +179,7 @@ function HeroBadge() {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.8, delay: 0.2, ease: [0.21, 0.47, 0.32, 0.98] }}
-      className="relative mx-auto aspect-square w-full max-w-[22rem]"
+      className="relative order-first mx-auto aspect-square w-full max-w-[14rem] sm:max-w-[20rem] lg:order-none lg:max-w-[22rem]"
     >
       <div aria-hidden className="absolute inset-0 rounded-full border border-dashed border-border" />
       <div className="absolute inset-[9%] overflow-hidden rounded-[42%_58%_55%_45%/48%_42%_58%_52%] bg-card shadow-2xl shadow-climb/20 ring-2 ring-climb/40">
@@ -189,7 +189,7 @@ function HeroBadge() {
           fill
           priority
           sizes="(min-width: 1024px) 22rem, 80vw"
-          className="object-cover object-[50%_22%] scale-[1.35] origin-[50%_22%]"
+          className="object-cover object-[50%_30%] scale-[1.12] origin-[50%_25%]"
         />
         <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-climb/25 via-transparent to-transparent mix-blend-soft-light" />
       </div>
@@ -208,8 +208,8 @@ function HeroBadge() {
               className="absolute -translate-x-1/2 -translate-y-1/2"
               style={{ left: `${x}%`, top: `${y}%` }}
             >
-              <span className="grid size-14 place-items-center rounded-2xl border border-border bg-card shadow-lg transition-transform hover:scale-110 focus-visible:scale-110 motion-safe:animate-[spin_40s_linear_infinite_reverse] group-hover:[animation-play-state:paused] group-focus-within:[animation-play-state:paused]">
-                <Icon className={cn("size-6", className)} aria-hidden />
+              <span className="grid size-11 place-items-center rounded-2xl sm:size-14 border border-border bg-card shadow-lg transition-transform hover:scale-110 focus-visible:scale-110 motion-safe:animate-[spin_40s_linear_infinite_reverse] group-hover:[animation-play-state:paused] group-focus-within:[animation-play-state:paused]">
+                <Icon className={cn("size-5 sm:size-6", className)} aria-hidden />
               </span>
             </a>
           );

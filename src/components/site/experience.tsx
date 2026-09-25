@@ -45,7 +45,7 @@ export function Experience() {
           />
 
           <ol className="space-y-10">
-          <li className="relative -mb-4 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          <li className="relative flex min-h-8 items-center gap-2 sm:min-h-12 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
             <span className="absolute -left-12 grid size-8 place-items-center rounded-full border border-border bg-background sm:-left-16 sm:size-12">
               <Flag className="size-4 text-climb" aria-hidden />
             </span>

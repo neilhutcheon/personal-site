@@ -28,10 +28,9 @@ export function Skills() {
           <li key={skill.name}>
             <Reveal delay={0.04 * i} className="h-full">
               <div className="group relative h-full overflow-hidden rounded-2xl border border-border bg-card/60 p-4 transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10">
-                {/* A carabiner-style gate that swings open on hover. */}
                 <span
                   aria-hidden
-                  className="absolute right-3 top-3 h-5 w-3 rounded-full border-2 border-muted-foreground/40 transition-transform duration-300 group-hover:rotate-[25deg] group-hover:border-primary"
+                  className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-gradient-to-r from-climb via-brass to-disc transition-transform duration-300 group-hover:scale-x-100"
                 />
                 <p className="font-heading text-lg font-semibold">{skill.name}</p>
                 <p className="mt-1 text-sm text-muted-foreground">{"detail" in skill ? skill.detail : " "}</p>

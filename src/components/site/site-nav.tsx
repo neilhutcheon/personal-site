@@ -41,15 +41,15 @@ export function SiteNav() {
         aria-label="Primary"
         className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-5 sm:px-8"
       >
-        <a href="#top" className="font-heading text-lg font-semibold tracking-tight">
+        <a href="#top" className="shrink-0 font-heading text-base font-semibold tracking-tight sm:text-lg">
           neil<span className="text-primary">.</span>hutcheon
         </a>
-        <ul className="-mr-2 flex items-center gap-0.5 overflow-x-auto text-sm [scrollbar-width:none] sm:gap-1">
+        <ul className="-mr-2 flex items-center gap-0 overflow-x-auto text-[13px] sm:text-sm [scrollbar-width:none] sm:gap-1">
           {links.map((link) => (
-            <li key={link.href} className={link.href === "#skills" ? "hidden sm:block" : undefined}>
+            <li key={link.href} className={link.href === "#skills" || link.href === "#about" ? "hidden sm:block" : undefined}>
               <a
                 href={link.href}
-                className="block rounded-md px-2 py-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:px-3"
+                className="block rounded-md px-1.5 py-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:px-3"
               >
                 {link.label}
               </a>
