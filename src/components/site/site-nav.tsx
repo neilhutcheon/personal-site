@@ -27,13 +27,13 @@ export function SiteNav() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-colors duration-300",
-        scrolled ? "border-b border-border bg-background/75 backdrop-blur-lg" : "bg-transparent",
+        "fixed inset-x-0 top-0 z-50 border-b-[3px] transition-colors duration-200",
+        scrolled ? "border-foreground bg-background" : "border-transparent bg-transparent",
       )}
     >
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:border-2 focus:border-foreground focus:bg-brass focus:px-3 focus:py-2 focus:font-bold focus:text-foreground"
       >
         Skip to content
       </a>
@@ -41,15 +41,18 @@ export function SiteNav() {
         aria-label="Primary"
         className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-5 sm:px-8"
       >
-        <a href="#top" className="shrink-0 font-heading text-base font-semibold tracking-tight sm:text-lg">
+        <a
+          href="#top"
+          className="stack-sm shrink-0 bg-brass px-2 py-0.5 font-heading text-base font-extrabold tracking-tight under-primary sm:text-lg"
+        >
           neil<span className="text-primary">.</span>hutcheon
         </a>
-        <ul className="-mr-2 flex items-center gap-0 overflow-x-auto text-[13px] sm:text-sm [scrollbar-width:none] sm:gap-1">
+        <ul className="-mr-2 flex items-center gap-0 overflow-x-auto font-mono text-xs font-bold uppercase tracking-wider [scrollbar-width:none] sm:gap-1 sm:text-[13px]">
           {links.map((link) => (
             <li key={link.href} className={link.href === "#skills" || link.href === "#about" ? "hidden sm:block" : undefined}>
               <a
                 href={link.href}
-                className="block rounded-md px-1.5 py-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:px-3"
+                className="block border-2 border-transparent px-1.5 py-1 text-foreground transition-colors hover:border-foreground hover:bg-card sm:px-3"
               >
                 {link.label}
               </a>
@@ -60,7 +63,7 @@ export function SiteNav() {
       <motion.div
         aria-hidden
         style={{ scaleX: progress }}
-        className="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-gradient-to-r from-climb via-brass to-disc"
+        className="absolute inset-x-0 -bottom-[3px] h-[3px] origin-left bg-primary"
       />
     </header>
   );

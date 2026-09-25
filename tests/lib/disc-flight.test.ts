@@ -1,10 +1,18 @@
 import { describe, expect, it } from "vitest";
 import {
   BASKET,
+  FAIRWAY,
+  PAR,
   TEE,
+  TREES,
+  applyTreeHit,
   computeFlight,
+  findTreeHit,
   flightToPath,
+  formatToPar,
+  nextLie,
   pointOnFlight,
+  scoreName,
   scoreThrow,
   truncateFlight,
 } from "../../src/lib/disc-flight";
@@ -26,6 +34,94 @@ describe("computeFlight", () => {
     expect(computeFlight(500, 999)).toEqual(computeFlight(100, 40));
     expect(computeFlight(-10, -999)).toEqual(computeFlight(0, -40));
   });
+
+  it("throws from a lie and heads toward the basket", () => {
+    const lie = { x: 400, y: 260 };
+    const f = computeFlight(40, 0, 0, lie);
+    expect(f.start).toEqual(lie);
+    const before = Math.hypot(lie.x - BASKET.x, lie.y - BASKET.y);
+    const after = Math.hypot(f.end.x - BASKET.x, f.end.y - BASKET.y);
+    expect(after).toBeLessThan(before);
+  });
+
+  it("can throw back toward the basket after overshooting it", () => {
+    const lie = { x: 580, y: 112 };
+    const f = computeFlight(10, 0, 0, lie);
+    expect(f.end.x).toBeLessThan(lie.x);
+  });
+});
+
+describe("findTreeHit", () => {
+  it("blocks the default flat drive from the tee", () => {
+    const hit = findTreeHit(computeFlight(60, 0));
+    expect(hit).not.toBeNull();
+    expect(hit!.t).toBeGreaterThan(0);
+    expect(hit!.t).toBeLessThan(1);
+  });
+
+  it("lets a shaped hyzer or anhyzer drive through cleanly", () => {
+    expect(findTreeHit(computeFlight(64, -22))).toBeNull();
+    expect(findTreeHit(computeFlight(62, 40))).toBeNull();
+  });
+
+  it("ignores a canopy the disc is already under so it can be thrown out", () => {
+    const tree = TREES[11];
+    const under = { x: tree.x, y: tree.y };
+    const f = computeFlight(10, 0, 0, under, { x: under.x, y: under.y - 100 });
+    const hit = findTreeHit(f);
+    expect(hit === null || hit.tree !== 11).toBe(true);
+  });
+
+  it("returns null when there are no trees", () => {
+    expect(findTreeHit(computeFlight(60, 0), [])).toBeNull();
+  });
+});
+
+describe("applyTreeHit", () => {
+  it("drops the disc short of the tree, back along its line", () => {
+    const f = computeFlight(60, 0);
+    const hit = findTreeHit(f)!;
+    const cut = applyTreeHit(f, hit);
+    const tree = TREES[hit.tree];
+    expect(cut.start).toEqual(f.start);
+    expect(cut.end.x).toBeLessThan(hit.point.x);
+    expect(Math.hypot(cut.end.x - tree.x, cut.end.y - tree.y)).toBeGreaterThan(tree.r);
+  });
+});
+
+describe("nextLie", () => {
+  it("plays an in-bounds disc as it lies", () => {
+    expect(nextLie({ x: 300, y: 160 })).toEqual({ x: 300, y: 160 });
+  });
+
+  it("brings an out-of-bounds disc back inside the fairway", () => {
+    const lie = nextLie({ x: 650, y: -20 });
+    expect(lie.x).toBeLessThan(FAIRWAY.width);
+    expect(lie.y).toBeGreaterThan(18);
+  });
+});
+
+describe("scoreName", () => {
+  it("names common scores relative to par", () => {
+    expect(scoreName(1)).toBe("Ace");
+    expect(scoreName(PAR - 1)).toBe("Birdie");
+    expect(scoreName(PAR)).toBe("Par");
+    expect(scoreName(PAR + 1)).toBe("Bogey");
+    expect(scoreName(PAR + 2)).toBe("Double bogey");
+    expect(scoreName(PAR + 5)).toBe("+5");
+  });
+
+  it("rejects impossible stroke counts", () => {
+    expect(() => scoreName(0)).toThrow(RangeError);
+  });
+});
+
+describe("formatToPar", () => {
+  it("formats even, under, and over par", () => {
+    expect(formatToPar(0)).toBe("E");
+    expect(formatToPar(-2)).toBe("-2");
+    expect(formatToPar(3)).toBe("+3");
+  });
 });
 
 describe("pointOnFlight", () => {
@@ -43,8 +139,8 @@ describe("scoreThrow", () => {
     expect(scoreThrow(BASKET)).toEqual({ result: "chains", feetFromBasket: 0 });
   });
 
-  it("can hit the chains with a well-judged hyzer", () => {
-    const f = computeFlight(73, -23);
+  it("can hit the chains from the tee with a well-judged throw", () => {
+    const f = computeFlight(88, 8);
     expect(scoreThrow(f.end).result).toBe("chains");
   });
 

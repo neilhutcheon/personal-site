@@ -1,6 +1,10 @@
 import { skills } from "@/content/resume";
+import { cn } from "@/lib/utils";
 import { Reveal } from "./motion";
 import { SectionHeading } from "./section-heading";
+
+const underTones = ["under-climb", "under-brass", "under-disc", "under-primary"];
+const pad = (n: number) => String(n).padStart(2, "0");
 
 const practices = [
   "Progressive Web Apps",
@@ -27,12 +31,15 @@ export function Skills() {
         {skills.map((skill, i) => (
           <li key={skill.name}>
             <Reveal delay={0.04 * i} className="h-full">
-              <div className="group relative h-full overflow-hidden rounded-2xl border border-border bg-card/60 p-4 transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10">
-                <span
-                  aria-hidden
-                  className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-gradient-to-r from-climb via-brass to-disc transition-transform duration-300 group-hover:scale-x-100"
-                />
-                <p className="font-heading text-lg font-semibold">{skill.name}</p>
+              <div
+                className={cn(
+                  "stack stack-press relative h-full bg-card p-4 pt-7",
+                  underTones[i % underTones.length],
+                  i % 2 ? "tilt-r" : "tilt-l",
+                )}
+              >
+                <span aria-hidden className="index-no">{pad(i + 1)}</span>
+                <p className="font-heading text-lg font-bold">{skill.name}</p>
                 <p className="mt-1 text-sm text-muted-foreground">{"detail" in skill ? skill.detail : " "}</p>
               </div>
             </Reveal>
@@ -45,7 +52,7 @@ export function Skills() {
           {practices.map((p) => (
             <li
               key={p}
-              className="rounded-full border border-border px-3.5 py-1.5 text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+              className="stack-sm bg-card px-3 py-1 font-mono text-xs font-bold uppercase tracking-wider under-brass transition-colors hover:bg-brass"
             >
               {p}
             </li>

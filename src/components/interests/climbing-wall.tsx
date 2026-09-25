@@ -18,9 +18,10 @@ import { cn } from "@/lib/utils";
 const holdColors: Record<Hold["kind"], string> = {
   jug: "var(--climb)",
   crimp: "var(--brass)",
-  sloper: "oklch(0.7 0.13 250)",
+  sloper: "var(--primary)",
   pinch: "var(--disc)",
 };
+const INK = "var(--foreground)";
 
 // Organic blob outline scaled by radius; rotated per hold so no two look identical.
 function holdPath(r: number) {
@@ -70,32 +71,30 @@ export function ClimbingWall() {
       <div className="relative mx-auto w-full max-w-[20rem]">
         <svg
           viewBox={`0 0 ${WALL.width} ${WALL.height}`}
-          className="w-full rounded-2xl border border-border shadow-xl"
+          className="stack w-full under-climb"
           role="group"
           aria-label="Bouldering wall. Holds within reach can be grabbed."
         >
           <defs>
-            <linearGradient id="wall-bg" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0" stopColor="oklch(0.3 0.03 60)" />
-              <stop offset="1" stopColor="oklch(0.22 0.025 60)" />
-            </linearGradient>
             <pattern id="t-nuts" width="32" height="32" patternUnits="userSpaceOnUse">
-              <circle cx="16" cy="16" r="1.6" fill="oklch(0 0 0 / 35%)" />
+              <circle cx="16" cy="16" r="2" fill="oklch(0 0 0 / 22%)" />
             </pattern>
           </defs>
-          <rect width={WALL.width} height={WALL.height} fill="url(#wall-bg)" />
+          {/* Flat plywood panels with ink seams. */}
+          <rect width={WALL.width} height={WALL.height} fill="oklch(0.86 0.06 75)" />
           <rect width={WALL.width} height={WALL.height} fill="url(#t-nuts)" />
-          <line x1="0" y1="160" x2={WALL.width} y2="160" stroke="oklch(0 0 0 / 25%)" />
-          <line x1="0" y1="320" x2={WALL.width} y2="320" stroke="oklch(0 0 0 / 25%)" />
+          <line x1="0" y1="160" x2={WALL.width} y2="160" stroke={INK} strokeWidth="2" />
+          <line x1="0" y1="320" x2={WALL.width} y2="320" stroke={INK} strokeWidth="2" />
 
           {!sent && (
             <motion.circle
               cx={current.x}
               cy={current.y}
               r={REACH}
-              fill="oklch(1 0 0 / 3%)"
-              stroke="oklch(1 0 0 / 22%)"
-              strokeDasharray="4 6"
+              fill="oklch(1 0 0 / 25%)"
+              stroke={INK}
+              strokeWidth="2"
+              strokeDasharray="6 6"
               initial={false}
               animate={{ cx: current.x, cy: current.y }}
               transition={{ type: "spring", stiffness: 120, damping: 18 }}
@@ -105,10 +104,10 @@ export function ClimbingWall() {
           <polyline
             points={ropePoints}
             fill="none"
-            stroke="oklch(0.95 0.01 90 / 70%)"
-            strokeWidth="2.5"
+            stroke={INK}
+            strokeWidth="3"
             strokeLinejoin="round"
-            strokeDasharray="1 5"
+            strokeDasharray="2 6"
             strokeLinecap="round"
           />
 
@@ -133,13 +132,13 @@ export function ClimbingWall() {
                   isReachable ? "cursor-pointer" : "cursor-not-allowed",
                 )}
               >
-                <circle className="focus" r={hold.r + 9} fill="none" stroke="white" strokeWidth="2" opacity="0" />
+                <circle className="focus" r={hold.r + 9} fill="none" stroke="var(--primary)" strokeWidth="3" opacity="0" />
                 {isReachable && (
                   <motion.circle
                     r={hold.r + 6}
                     fill="none"
-                    stroke={holdColors[hold.kind]}
-                    strokeWidth="2"
+                    stroke={INK}
+                    strokeWidth="2.5"
                     initial={{ opacity: 0.2, scale: 0.9 }}
                     animate={{ opacity: [0.2, 0.9, 0.2], scale: [0.9, 1.15, 0.9] }}
                     transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
@@ -150,16 +149,16 @@ export function ClimbingWall() {
                   d={holdPath(hold.r)}
                   transform={`rotate(${(i * 47) % 360})`}
                   fill={holdColors[hold.kind]}
-                  opacity={isReachable || visited || sent ? 1 : 0.45}
-                  stroke="oklch(0 0 0 / 40%)"
-                  strokeWidth="1.5"
+                  opacity={isReachable || visited || sent ? 1 : 0.4}
+                  stroke={INK}
+                  strokeWidth="2.5"
                   className="transition-opacity"
                 />
                 {(hold.start || hold.top) && (
                   <text
                     y={hold.r + 16}
                     textAnchor="middle"
-                    className="fill-foreground font-mono text-[10px] uppercase tracking-widest"
+                    className="fill-foreground font-mono text-[10px] font-bold uppercase tracking-widest"
                   >
                     {hold.start ? "start" : "top"}
                   </text>
@@ -174,8 +173,8 @@ export function ClimbingWall() {
             transition={{ type: "spring", stiffness: 160, damping: 16 }}
             pointerEvents="none"
           >
-            <circle r="7" fill="white" stroke="oklch(0.2 0.02 255)" strokeWidth="2" />
-            <circle r="2.5" fill="var(--climb)" />
+            <circle r="7" fill="white" stroke={INK} strokeWidth="2.5" />
+            <circle r="2.5" fill={INK} />
           </motion.g>
 
           <AnimatePresence>
@@ -187,6 +186,8 @@ export function ClimbingWall() {
                   cy={current.y}
                   r="4"
                   fill="white"
+                  stroke={INK}
+                  strokeWidth="1.5"
                   initial={{ opacity: 0.9, cx: current.x, cy: current.y }}
                   animate={{
                     opacity: 0,
@@ -202,19 +203,22 @@ export function ClimbingWall() {
 
       <div className="space-y-5">
         <div>
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">Your beta</p>
-          <p aria-live="polite" className={cn("mt-2 text-lg font-medium", sent && "text-climb")}>
+          <p className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">Your beta</p>
+          <p
+            aria-live="polite"
+            className={cn("mt-2 text-lg font-bold", sent && "inline-block border-2 border-foreground bg-climb px-2")}
+          >
             {status}
           </p>
         </div>
-        <dl className="grid grid-cols-2 gap-3 text-sm">
-          <div className="rounded-xl border border-border bg-background/60 p-3">
-            <dt className="text-muted-foreground">Moves</dt>
-            <dd className="font-heading text-2xl font-semibold">{moves}</dd>
+        <dl className="grid grid-cols-2 gap-4 text-sm">
+          <div className="stack-sm ruled bg-card p-3 under-primary">
+            <dt className="font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground">Moves</dt>
+            <dd className="font-heading text-2xl font-extrabold">{moves}</dd>
           </div>
-          <div className="rounded-xl border border-border bg-background/60 p-3">
-            <dt className="text-muted-foreground">Grade</dt>
-            <dd className="font-heading text-2xl font-semibold">{sent ? gradeForMoves(moves) : "—"}</dd>
+          <div className={cn("stack-sm p-3 under-climb", sent ? "bg-brass" : "ruled bg-card")}>
+            <dt className="font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground">Grade</dt>
+            <dd className="font-heading text-2xl font-extrabold">{sent ? gradeForMoves(moves) : "—"}</dd>
           </div>
         </dl>
         <p className="text-sm text-muted-foreground">
