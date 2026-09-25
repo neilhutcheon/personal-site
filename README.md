@@ -33,6 +33,21 @@ npm run build      # production build
 npm start          # serve the production build on port 4317
 ```
 
+## Deploy (Cloudflare Pages)
+
+The site is a static export (`output: "export"` in `next.config.ts`), so `npm run build` writes plain
+HTML/JS/images to `out/`. In Cloudflare Pages, connect the GitHub repo and use:
+
+| Setting                | Value           |
+| ---------------------- | --------------- |
+| Framework preset       | Next.js (Static HTML Export) |
+| Build command          | `npm run build` |
+| Build output directory | `out`           |
+| Node version           | `NODE_VERSION=20` (environment variable) |
+
+Every push to `main` deploys to production; other branches get preview URLs. Attach the domain under
+Pages → Custom domains; if the domain is on Cloudflare Registrar the DNS record is created for you.
+
 ## Project layout
 
 ```
