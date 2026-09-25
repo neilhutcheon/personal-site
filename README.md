@@ -33,20 +33,25 @@ npm run build      # production build
 npm start          # serve the production build on port 4317
 ```
 
-## Deploy (Cloudflare Pages)
+## Deploy (Cloudflare Workers, static assets)
 
 The site is a static export (`output: "export"` in `next.config.ts`), so `npm run build` writes plain
-HTML/JS/images to `out/`. In Cloudflare Pages, connect the GitHub repo and use:
+HTML/JS/images to `out/`. `wrangler.jsonc` declares an assets-only Worker that serves that folder.
+In the Cloudflare dashboard (Workers & Pages → the project → Settings → Build), use:
 
-| Setting                | Value           |
-| ---------------------- | --------------- |
-| Framework preset       | Next.js (Static HTML Export) |
-| Build command          | `npm run build` |
-| Build output directory | `out`           |
-| Node version           | `NODE_VERSION=20` (environment variable) |
+| Setting          | Value                 |
+| ---------------- | --------------------- |
+| Framework preset | None                  |
+| Build command    | `npm run build`       |
+| Deploy command   | `npx wrangler deploy` |
+| Root directory   | `/`                   |
 
-Every push to `main` deploys to production; other branches get preview URLs. Attach the domain under
-Pages → Custom domains; if the domain is on Cloudflare Registrar the DNS record is created for you.
+Do **not** use the "Next.js" preset; it runs `opennextjs-cloudflare`, which expects a server-rendered
+app and fails on static exports. Every push to `main` deploys to production; other branches get preview
+URLs. Attach the domain under the Worker's Settings → Domains & Routes; if the domain is on Cloudflare
+Registrar the DNS record is created for you.
+
+To deploy from your machine instead: `npm run build && npx wrangler deploy` (after `npx wrangler login`).
 
 ## Project layout
 
