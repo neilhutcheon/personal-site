@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- "Stacked paper" mark: a brass sheet with an ink border sitting on a primary-blue sheet.
+       Colours are hex copies of the brass, primary and ink tokens in globals.css because favicon
+       renderers don't reliably support oklch(). -->
+  <rect x="10" y="10" width="52" height="52" fill="#130e0b"/>
+  <rect x="13" y="13" width="46" height="46" fill="#386bfa"/>
+  <rect x="2" y="2" width="52" height="52" fill="#130e0b"/>
+  <rect x="5" y="5" width="46" height="46" fill="#ffd32e"/>
+  <!-- Block-cut N and H drawn as paths so no font is needed. -->
+  <path fill="#130e0b" transform="translate(0.5 1)" d="M8 15h6l6 12V15h6v24h-6l-6-12v12H8z M29 15h6v9h6v-9h6v24h-6v-9h-6v9h-6z"/>
+</svg>
