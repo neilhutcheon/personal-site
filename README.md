@@ -4,7 +4,7 @@ Personal bio site for Neil Hutcheon, a Minneapolis-based Senior Software Enginee
 experience, skills, and contact details (all taken from his resume) and his three big hobbies,
 each with a small interactive toy:
 
-- **Rock climbing**: a bouldering wall you climb by grabbing holds within reach, graded by how few moves you take.
+- **Rock climbing**: a 3D climbing-gym boulder, drawn with three.js in the site's cartoon style. Move a climber between holds within reach; fewer moves earn a harder grade.
 - **Disc golf**: set power and release angle, then throw for the basket along a curved flight path.
 - **Trombone**: drag the slide (or use the keyboard) to play a Web Audio brass synth with real slide-position pitch math.
 
@@ -13,6 +13,7 @@ each with a small interactive toy:
 - [Next.js](https://nextjs.org) (App Router) + TypeScript
 - Tailwind CSS v4 + [shadcn/ui](https://ui.shadcn.com) (Base UI primitives)
 - [Framer Motion](https://motion.dev) for scroll and interaction animation
+- [three.js](https://threejs.org) for the climbing gym
 - [Vitest](https://vitest.dev) for unit tests of the hobby logic
 
 ## Run it locally
@@ -60,7 +61,7 @@ src/
   app/                 # layout, page, global styles/theme
   components/
     site/              # nav, hero, about, experience, skills, interests, contact
-    interests/         # climbing wall, disc golf, trombone (+ Web Audio synth hook)
+    interests/         # climbing gym (three.js), disc golf, trombone (+ Web Audio synth hook)
     ui/                # shadcn/ui components
   content/resume.ts    # all professional copy, sourced from the resume
   lib/                 # pure logic: disc-flight, climbing, trombone

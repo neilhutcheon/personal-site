@@ -1,204 +1,127 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { useReducedMotion } from "framer-motion";
 import { RotateCcw, Undo2 } from "lucide-react";
-import { useMemo, useState, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   HOLDS,
-  REACH,
   START_HOLD,
-  WALL,
   canReach,
   gradeForMoves,
-  type Hold,
+  holdById,
+  holdName,
+  type HoldKind,
 } from "@/lib/climbing";
 import { cn } from "@/lib/utils";
 
-const holdColors: Record<Hold["kind"], string> = {
-  jug: "var(--climb)",
-  crimp: "var(--brass)",
-  sloper: "var(--primary)",
-  pinch: "var(--disc)",
+const kindClass: Record<HoldKind, string> = {
+  jug: "bg-climb",
+  crimp: "bg-brass",
+  sloper: "bg-primary text-primary-foreground",
+  pinch: "bg-disc",
 };
-const INK = "var(--foreground)";
 
-// Organic blob outline scaled by radius; rotated per hold so no two look identical.
-function holdPath(r: number) {
-  const k = r / 10;
-  return `M${-10 * k} ${-2 * k} C${-9 * k} ${-9 * k} ${6 * k} ${-11 * k} ${10 * k} ${-4 * k} C${13 * k} ${2 * k} ${7 * k} ${10 * k} ${0} ${9 * k} C${-7 * k} ${9 * k} ${-11 * k} ${4 * k} ${-10 * k} ${-2 * k}Z`;
-}
-
-const byId = new Map(HOLDS.map((h) => [h.id, h]));
-const chalk = Array.from({ length: 10 }, (_, i) => ({
-  angle: (i / 10) * Math.PI * 2,
-  dist: 26 + (i % 3) * 10,
-}));
+type World = {
+  sync: (state: { path: string[]; reachable: string[]; sent: boolean; reducedMotion: boolean }) => void;
+  dispose: () => void;
+};
 
 export function ClimbingWall() {
+  const reduced = useReducedMotion();
+  const hostRef = useRef<HTMLDivElement>(null);
+  const worldRef = useRef<World | null>(null);
   const [path, setPath] = useState<string[]>([START_HOLD.id]);
-  const current = byId.get(path[path.length - 1])!;
+  const [failed, setFailed] = useState(false);
+
+  const current = holdById(path[path.length - 1]);
   const moves = path.length - 1;
   const sent = Boolean(current.top);
+  const reachable = useMemo(() => {
+    if (sent) return new Set<string>();
+    return new Set(HOLDS.filter((hold) => canReach(current, hold)).map((hold) => hold.id));
+  }, [current, sent]);
 
-  const reachable = useMemo(
-    () => new Set(HOLDS.filter((h) => !sent && canReach(current, h)).map((h) => h.id)),
-    [current, sent],
-  );
+  const grab = useCallback((id: string) => {
+    setPath((prev) => {
+      const next = HOLDS.find((hold) => hold.id === id);
+      const from = holdById(prev[prev.length - 1]);
+      if (!next || from.top || !canReach(from, next)) return prev;
+      return [...prev, id];
+    });
+  }, []);
 
-  const grab = (hold: Hold) => {
-    if (!reachable.has(hold.id)) return;
-    setPath((p) => [...p, hold.id]);
-  };
+  const onGrabRef = useRef(grab);
+  const stateRef = useRef({
+    path,
+    reachable: [...reachable],
+    sent,
+    reducedMotion: Boolean(reduced),
+  });
 
-  const onHoldKey = (e: KeyboardEvent, hold: Hold) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      grab(hold);
-    }
-  };
+  useEffect(() => {
+    onGrabRef.current = grab;
+  }, [grab]);
 
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return;
+    let dead = false;
+    let world: World | null = null;
+    // Reason: three.js touches WebGL, so it loads after hydration instead of during the server render.
+    import("@/components/interests/climbing/world")
+      .then(({ ClimbingWorld }) => {
+        if (dead) return;
+        try {
+          world = new ClimbingWorld(host, (id) => onGrabRef.current(id));
+          world.sync(stateRef.current);
+          worldRef.current = world;
+        } catch {
+          setFailed(true);
+        }
+      })
+      .catch(() => {
+        if (!dead) setFailed(true);
+      });
+    return () => {
+      dead = true;
+      world?.dispose();
+      worldRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const state = {
+      path,
+      reachable: [...reachable],
+      sent,
+      reducedMotion: Boolean(reduced),
+    };
+    stateRef.current = state;
+    worldRef.current?.sync(state);
+  }, [path, reachable, sent, reduced]);
+
+  const options = HOLDS.filter((hold) => reachable.has(hold.id)).sort((a, b) => a.y - b.y || a.x - b.x);
   const status = sent
     ? `Sent it! ${moves} moves, graded ${gradeForMoves(moves)}.`
     : moves === 0
-      ? "On the start hold. Pick a glowing hold within reach."
-      : `${moves} move${moves === 1 ? "" : "s"} in. ${reachable.size} holds within reach.`;
-
-  const ropePoints = path.map((id) => `${byId.get(id)!.x},${byId.get(id)!.y}`).join(" ");
+      ? "On the start jug. Grab a glowing hold your climber can reach."
+      : `${holdName(current)}. ${moves} move${moves === 1 ? "" : "s"} in, ${options.length} within reach.`;
 
   return (
-    <div className="grid gap-6 md:grid-cols-[minmax(0,20rem)_1fr] md:items-center">
-      <div className="relative mx-auto w-full max-w-[20rem]">
-        <svg
-          viewBox={`0 0 ${WALL.width} ${WALL.height}`}
-          className="stack w-full under-climb"
-          role="group"
-          aria-label="Bouldering wall. Holds within reach can be grabbed."
-        >
-          <defs>
-            <pattern id="t-nuts" width="32" height="32" patternUnits="userSpaceOnUse">
-              <circle cx="16" cy="16" r="2" fill="oklch(0 0 0 / 22%)" />
-            </pattern>
-          </defs>
-          {/* Flat plywood panels with ink seams. */}
-          <rect width={WALL.width} height={WALL.height} fill="oklch(0.86 0.06 75)" />
-          <rect width={WALL.width} height={WALL.height} fill="url(#t-nuts)" />
-          <line x1="0" y1="160" x2={WALL.width} y2="160" stroke={INK} strokeWidth="2" />
-          <line x1="0" y1="320" x2={WALL.width} y2="320" stroke={INK} strokeWidth="2" />
-
-          {!sent && (
-            <motion.circle
-              cx={current.x}
-              cy={current.y}
-              r={REACH}
-              fill="oklch(1 0 0 / 25%)"
-              stroke={INK}
-              strokeWidth="2"
-              strokeDasharray="6 6"
-              initial={false}
-              animate={{ cx: current.x, cy: current.y }}
-              transition={{ type: "spring", stiffness: 120, damping: 18 }}
-            />
-          )}
-
-          <polyline
-            points={ropePoints}
-            fill="none"
-            stroke={INK}
-            strokeWidth="3"
-            strokeLinejoin="round"
-            strokeDasharray="2 6"
-            strokeLinecap="round"
-          />
-
-          {HOLDS.map((hold, i) => {
-            const isReachable = reachable.has(hold.id);
-            const visited = path.includes(hold.id);
-            const label = `${hold.start ? "Start " : hold.top ? "Top " : ""}${hold.kind} hold${
-              isReachable ? ", within reach" : visited ? ", already used" : ", out of reach"
-            }`;
-            return (
-              <g
-                key={hold.id}
-                transform={`translate(${hold.x} ${hold.y})`}
-                role="button"
-                tabIndex={isReachable ? 0 : -1}
-                aria-label={label}
-                aria-disabled={!isReachable}
-                onClick={() => grab(hold)}
-                onKeyDown={(e) => onHoldKey(e, hold)}
-                className={cn(
-                  "outline-none [&:focus-visible>circle.focus]:opacity-100",
-                  isReachable ? "cursor-pointer" : "cursor-not-allowed",
-                )}
-              >
-                <circle className="focus" r={hold.r + 9} fill="none" stroke="var(--primary)" strokeWidth="3" opacity="0" />
-                {isReachable && (
-                  <motion.circle
-                    r={hold.r + 6}
-                    fill="none"
-                    stroke={INK}
-                    strokeWidth="2.5"
-                    initial={{ opacity: 0.2, scale: 0.9 }}
-                    animate={{ opacity: [0.2, 0.9, 0.2], scale: [0.9, 1.15, 0.9] }}
-                    transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                )}
-                <circle r={hold.r + 14} fill="transparent" />
-                <path
-                  d={holdPath(hold.r)}
-                  transform={`rotate(${(i * 47) % 360})`}
-                  fill={holdColors[hold.kind]}
-                  opacity={isReachable || visited || sent ? 1 : 0.4}
-                  stroke={INK}
-                  strokeWidth="2.5"
-                  className="transition-opacity"
-                />
-                {(hold.start || hold.top) && (
-                  <text
-                    y={hold.r + 16}
-                    textAnchor="middle"
-                    className="fill-foreground font-mono text-[10px] font-bold uppercase tracking-widest"
-                  >
-                    {hold.start ? "start" : "top"}
-                  </text>
-                )}
-              </g>
-            );
-          })}
-
-          <motion.g
-            initial={false}
-            animate={{ x: current.x, y: current.y }}
-            transition={{ type: "spring", stiffness: 160, damping: 16 }}
-            pointerEvents="none"
-          >
-            <circle r="7" fill="white" stroke={INK} strokeWidth="2.5" />
-            <circle r="2.5" fill={INK} />
-          </motion.g>
-
-          <AnimatePresence>
-            {sent &&
-              chalk.map((c, i) => (
-                <motion.circle
-                  key={i}
-                  cx={current.x}
-                  cy={current.y}
-                  r="4"
-                  fill="white"
-                  stroke={INK}
-                  strokeWidth="1.5"
-                  initial={{ opacity: 0.9, cx: current.x, cy: current.y }}
-                  animate={{
-                    opacity: 0,
-                    cx: current.x + Math.cos(c.angle) * c.dist,
-                    cy: current.y + Math.sin(c.angle) * c.dist,
-                  }}
-                  transition={{ duration: 1.1, ease: "easeOut" }}
-                />
-              ))}
-          </AnimatePresence>
-        </svg>
+    <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
+      <div>
+        <div className="stack relative h-[26rem] w-full overflow-hidden bg-background under-climb sm:h-[36rem]">
+          <div ref={hostRef} className="absolute inset-0" />
+          {failed ? (
+            <p className="absolute inset-0 grid place-items-center p-6 text-center text-sm font-bold">
+              This browser can&apos;t show the 3D wall. Use the hold buttons to climb.
+            </p>
+          ) : null}
+        </div>
+        <p className="mt-3 font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground">
+          Drag to look around · click a glowing hold
+        </p>
       </div>
 
       <div className="space-y-5">
@@ -222,10 +145,31 @@ export function ClimbingWall() {
           </div>
         </dl>
         <p className="text-sm text-muted-foreground">
-          Fewer, bigger moves earn a harder grade. The dashed ring is your reach. Can you find the four-move beta?
+          The glowing holds are in reach. Bigger, fewer moves earn a harder grade — four moves sends it at{" "}
+          {gradeForMoves(4)}.
         </p>
+        <div className="flex flex-wrap gap-2" aria-label="Holds within reach">
+          {options.map((hold) => (
+            <Button key={hold.id} variant="outline" size="sm" className={kindClass[hold.kind]} onClick={() => grab(hold.id)}>
+              {holdName(hold)}
+            </Button>
+          ))}
+        </div>
+        <ul className="flex flex-wrap gap-1.5" aria-label="Hold colours">
+          {(["jug", "crimp", "sloper", "pinch"] as HoldKind[]).map((kind) => (
+            <li
+              key={kind}
+              className={cn(
+                "border-2 border-foreground px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider",
+                kindClass[kind],
+              )}
+            >
+              {kind}
+            </li>
+          ))}
+        </ul>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" onClick={() => setPath((p) => p.slice(0, -1))} disabled={moves === 0}>
+          <Button variant="outline" onClick={() => setPath((prev) => (prev.length > 1 ? prev.slice(0, -1) : prev))} disabled={moves === 0}>
             <Undo2 aria-hidden />
             Downclimb
           </Button>

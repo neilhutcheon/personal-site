@@ -133,7 +133,7 @@ export function Interests() {
           under="under-climb"
           kicker="Rock climbing"
           title="Reading the route."
-          interactiveTitle="Send the boulder problem"
+          interactiveTitle="Climb the gym boulder"
           media={
             <div className="grid gap-3 sm:h-[26rem] sm:grid-cols-3 sm:grid-rows-2">
               {climbingPhotos.map((photo) => (
