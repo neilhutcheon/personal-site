@@ -283,8 +283,13 @@ html {
   line-height: 1.2;
 }
 
-/* Small mono index number in a card corner ("01"). */
+/* Small mono index number in a card corner ("01").
+   Reason: the number is drawn from data-index via ::before so it never joins the card's text
+   content; as real text it leaked into crawlers and copy/paste as "01years shipping…". */
 @utility index-no {
+  &::before {
+    content: attr(data-index);
+  }
   position: absolute;
   top: 0.6rem;
   right: 0.75rem;

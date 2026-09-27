@@ -36,23 +36,23 @@ export function About() {
           </Reveal>
         </div>
 
-        <dl className="grid grid-cols-2 gap-3 self-end sm:gap-4">
+        <ul aria-label="At a glance" className="grid grid-cols-2 gap-3 self-end sm:gap-4">
           {stats.map((stat, i) => {
             const tone = statTones[i % statTones.length];
             return (
-              <Reveal key={stat.label} delay={0.05 * i}>
-                <div className={cn("stack relative h-full p-5 sm:p-6", tone.bg, tone.under, tone.tilt)}>
-                  <span aria-hidden className="index-no">{pad(i + 1)}</span>
-                  <dt className="sr-only">{stat.label}</dt>
-                  <dd>
-                    <span className="block font-heading text-4xl font-extrabold sm:text-5xl">{stat.value}</span>
+              <li key={stat.label}>
+                <Reveal delay={0.05 * i} className="h-full">
+                  <div className={cn("stack relative h-full p-5 sm:p-6", tone.bg, tone.under, tone.tilt)}>
+                    <span aria-hidden className="index-no" data-index={pad(i + 1)} />
+                    {/* Reason: the space keeps the value and label apart in the text crawlers read. */}
+                    <span className="block font-heading text-4xl font-extrabold sm:text-5xl">{stat.value}</span>{" "}
                     <span className="mt-2 block text-sm font-medium leading-snug">{stat.label}</span>
-                  </dd>
-                </div>
-              </Reveal>
+                  </div>
+                </Reveal>
+              </li>
             );
           })}
-        </dl>
+        </ul>
       </div>
 
       <ul className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -72,7 +72,7 @@ export function About() {
                   >
                     <Icon className="size-4" strokeWidth={2.5} aria-hidden />
                   </span>
-                  <span aria-hidden className="index-no">{pad(i + 1)}</span>
+                  <span aria-hidden className="index-no" data-index={pad(i + 1)} />
                   <CardContent className="flex flex-col gap-2">
                     <h3 className="font-heading text-lg font-bold">{area.title}</h3>
                     <p className="text-sm leading-relaxed text-muted-foreground">{area.body}</p>

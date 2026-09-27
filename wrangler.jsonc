@@ -4,6 +4,8 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "neil-hutcheon-bio",
   "compatibility_date": "2026-09-01",
+  // Non-production branches deploy with `wrangler preview`, which requires this block (it can be empty).
+  "previews": {},
   "assets": {
     "directory": "./out",
     // Serve Next's exported 404.html for unknown paths instead of a blank response.

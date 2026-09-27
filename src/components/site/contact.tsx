@@ -6,6 +6,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { profile } from "@/content/resume";
 import { cn } from "@/lib/utils";
 import { Reveal } from "./motion";
+import { ProfileLinks } from "./profile-links";
 
 export function Contact() {
   const [copied, setCopied] = useState<"idle" | "copied" | "error">("idle");
@@ -30,8 +31,8 @@ export function Contact() {
             Let&rsquo;s build something worth sending.
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-lg font-medium text-pretty">
-            Whether it&rsquo;s an architecture problem, a pipeline, or a recommendation for the local crag or
-            course, my inbox is open.
+            {profile.availability} Whether it&rsquo;s a role, an architecture problem, or a recommendation
+            for the local crag or course, my inbox is open.
           </p>
           <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a href={`mailto:${profile.email}`} className={cn(buttonVariants({ size: "lg" }), "under-disc normal-case tracking-normal")}>
@@ -43,6 +44,7 @@ export function Contact() {
               {copied === "copied" ? "Copied" : copied === "error" ? "Copy failed" : "Copy email"}
             </Button>
           </div>
+          <ProfileLinks className="mt-4 justify-center" />
           <p aria-live="polite" className="sr-only">
             {copied === "copied" ? "Email address copied to clipboard" : ""}
           </p>

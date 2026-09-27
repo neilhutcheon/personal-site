@@ -1,9 +1,10 @@
-import { Disc3, Mountain, Music2, type LucideIcon } from "lucide-react";
+import { Code2, Disc3, Mountain, Music2, type LucideIcon } from "lucide-react";
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { ClimbingWall } from "@/components/interests/climbing-wall";
 import { DiscGolf } from "@/components/interests/disc-golf";
 import { Trombone } from "@/components/interests/trombone";
+import { siteRepo } from "@/content/resume";
 import { cn } from "@/lib/utils";
 import { Reveal } from "./motion";
 import { SectionHeading } from "./section-heading";
@@ -51,9 +52,15 @@ type HobbyProps = {
   media?: ReactNode;
   interactive: ReactNode;
   interactiveTitle: string;
+  /** One-line summary of how the toy is built, shown as front-end work. */
+  build: string;
+  /** Repo paths for the toy's source, relative to the repo root. */
+  source: { label: string; path: string }[];
 };
 
-function Hobby({ id, Icon, accent, under, kicker, title, children, media, interactive, interactiveTitle }: HobbyProps) {
+const sourceUrl = (path: string) => `${siteRepo}/blob/main/${path}`;
+
+function Hobby({ id, Icon, accent, under, kicker, title, children, media, interactive, interactiveTitle, build, source }: HobbyProps) {
   return (
     <article id={id} aria-labelledby={`${id}-title`} className="scroll-mt-24">
       <div className={cn("grid gap-8", media && "lg:grid-cols-[1fr_1.35fr] lg:items-center lg:gap-12")}>
@@ -79,6 +86,32 @@ function Hobby({ id, Icon, accent, under, kicker, title, children, media, intera
         <div className={cn("stack-lg relative mt-8 bg-card p-4 pt-8 sm:p-8 sm:pt-10", under)}>
           <p className={cn("tab", accent)}>Try it · {interactiveTitle}</p>
           {interactive}
+          <div className="mt-6 flex flex-col gap-2 border-t-2 border-dashed border-foreground/40 pt-4 text-sm sm:flex-row sm:items-baseline sm:gap-4">
+            <p className="inline-flex shrink-0 items-center gap-1.5 font-mono text-xs font-bold uppercase tracking-wider">
+              <Code2 className="size-4" strokeWidth={2.5} aria-hidden />
+              How I built this
+            </p>
+            <p className="text-muted-foreground">
+              {build}{" "}
+              <span className="whitespace-nowrap">
+                Source:{" "}
+                {source.map((s, i) => (
+                  <span key={s.path}>
+                    {i > 0 ? ", " : null}
+                    <a
+                      href={sourceUrl(s.path)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-mono text-xs font-bold text-foreground underline decoration-2 underline-offset-4 hover:text-primary"
+                    >
+                      {s.label}
+                    </a>
+                  </span>
+                ))}
+                <span className="sr-only"> (opens GitHub in a new tab)</span>
+              </span>
+            </p>
+          </div>
         </div>
       </Reveal>
     </article>
@@ -123,7 +156,7 @@ export function Interests() {
           id="interests-title"
           eyebrow="Off the keyboard"
           title="Climbing, disc golf, and trombone."
-          description="The hobbies that keep me curious. Each one comes with a small toy to play with."
+          description="The hobbies that keep me curious. Each one comes with a small toy I built from scratch, so they double as front-end work samples, with source on GitHub."
         />
 
         <Hobby
@@ -146,6 +179,11 @@ export function Interests() {
             </div>
           }
           interactive={<ClimbingWall />}
+          build="three.js scene with toon shading and a climber posed by two-bone inverse kinematics; the IK and route logic are pure TypeScript with Vitest tests."
+          source={[
+            { label: "world.ts", path: "src/components/interests/climbing/world.ts" },
+            { label: "limb-ik.ts", path: "src/lib/limb-ik.ts" },
+          ]}
         >
           <p>
             Climbing is the
@@ -162,6 +200,11 @@ export function Interests() {
           title="Chasing chains."
           interactiveTitle="Throw for the basket"
           interactive={<DiscGolf />}
+          build="Bézier flight model for hyzer and anhyzer fade, tree collisions, and scoring, drawn as animated SVG and unit-tested."
+          source={[
+            { label: "disc-golf.tsx", path: "src/components/interests/disc-golf.tsx" },
+            { label: "disc-flight.ts", path: "src/lib/disc-flight.ts" },
+          ]}
         >
           <p>
             Disc golf is a physics problem you solve with your arm: power, release angle, and how
@@ -194,6 +237,11 @@ export function Interests() {
             </figure>
           }
           interactive={<Trombone />}
+          build="Web Audio synth (detuned oscillators through a low-pass filter) driven by real slide-position pitch math, playable by pointer or keyboard."
+          source={[
+            { label: "use-trombone-synth.ts", path: "src/components/interests/use-trombone-synth.ts" },
+            { label: "trombone.ts", path: "src/lib/trombone.ts" },
+          ]}
         >
           <p>
             Classical training taught me patience, listening, and that fundamentals practiced

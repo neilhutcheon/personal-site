@@ -1,4 +1,4 @@
-import { skills } from "@/content/resume";
+import { skillGroups } from "@/content/resume";
 import { cn } from "@/lib/utils";
 import { Reveal } from "./motion";
 import { SectionHeading } from "./section-heading";
@@ -27,9 +27,9 @@ export function Skills() {
         description="The gear I clip into every day, plus the practices that keep projects moving."
       />
 
-      <ul className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
-        {skills.map((skill, i) => (
-          <li key={skill.name}>
+      <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {skillGroups.map((group, i) => (
+          <li key={group.name}>
             <Reveal delay={0.04 * i} className="h-full">
               <div
                 className={cn(
@@ -38,9 +38,15 @@ export function Skills() {
                   i % 2 ? "tilt-r" : "tilt-l",
                 )}
               >
-                <span aria-hidden className="index-no">{pad(i + 1)}</span>
-                <p className="font-heading text-lg font-bold">{skill.name}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{"detail" in skill ? skill.detail : " "}</p>
+                <span aria-hidden className="index-no" data-index={pad(i + 1)} />
+                <h3 className="font-heading text-lg font-bold">{group.name}</h3>
+                <ul className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-sm text-muted-foreground">
+                  {group.items.map((item) => (
+                    <li key={item} className="after:ml-3 after:text-foreground/40 after:content-['/'] last:after:content-none">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </Reveal>
           </li>

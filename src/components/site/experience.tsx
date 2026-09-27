@@ -4,7 +4,7 @@ import { motion, useScroll, useSpring } from "framer-motion";
 import { Flag } from "lucide-react";
 import { useRef } from "react";
 import { Badge } from "@/components/ui/badge";
-import { roles } from "@/content/resume";
+import { company, roles } from "@/content/resume";
 import { cn } from "@/lib/utils";
 import { Reveal } from "./motion";
 import { SectionHeading } from "./section-heading";
@@ -32,7 +32,7 @@ export function Experience() {
     <section
       id="experience"
       aria-labelledby="experience-title"
-      className="relative border-b-[3px] border-foreground bg-muted py-24 sm:py-32"
+      className="relative border-y-[3px] border-foreground bg-muted py-24 sm:py-32"
     >
       <div aria-hidden className="grid-paper absolute inset-0 -z-10" />
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
@@ -40,7 +40,7 @@ export function Experience() {
           id="experience-title"
           eyebrow="Experience"
           title="The route so far."
-          description="Four roles at Curve10 LLC, from part-time junior engineer in 2021 to senior engineer owning architecture today. Read it top-down like a topo: the crux is where I am now."
+          description={`Four roles at ${company.name}, ${company.blurb}, from part-time junior engineer in 2021 to senior engineer owning architecture today. Read it top-down like a topo: the crux is where I am now.`}
         />
 
         <div ref={routeRef} className="relative mt-16 pl-12 sm:pl-16">
@@ -100,6 +100,14 @@ export function Experience() {
                         <div key={c.name} className="ruled border-2 border-foreground bg-card p-4">
                           <p className="font-heading font-bold text-foreground">{c.name}</p>
                           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{c.detail}</p>
+                          {c.project ? (
+                            <a
+                              href={`#${c.project}`}
+                              className="mt-2 inline-flex font-mono text-xs font-bold uppercase tracking-wider underline decoration-2 underline-offset-4 hover:text-primary"
+                            >
+                              Read the write-up →
+                            </a>
+                          ) : null}
                         </div>
                       ))}
                     </div>
