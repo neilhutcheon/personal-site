@@ -1,0 +1,4 @@
+# Cloudflare static-assets headers. Next exports the OG image without an extension,
+# so without this it would be served as application/octet-stream and link previews would drop it.
+/opengraph-image
+  Content-Type: image/png

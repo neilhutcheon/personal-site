@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 
 const links = [
   { href: "#about", label: "About" },
+  { href: "#projects", label: "Work" },
   { href: "#experience", label: "Experience" },
   { href: "#skills", label: "Skills" },
   { href: "#interests", label: "Interests" },
@@ -49,7 +50,7 @@ export function SiteNav() {
         </a>
         <ul className="-mr-2 flex items-center gap-0 overflow-x-auto font-mono text-xs font-bold uppercase tracking-wider [scrollbar-width:none] sm:gap-1 sm:text-[13px]">
           {links.map((link) => (
-            <li key={link.href} className={link.href === "#skills" || link.href === "#about" ? "hidden sm:block" : undefined}>
+            <li key={link.href} className={link.href === "#skills" || link.href === "#about" || link.href === "#interests" ? "hidden sm:block" : undefined}>
               <a
                 href={link.href}
                 className="block border-2 border-transparent px-1.5 py-1 text-foreground transition-colors hover:border-foreground hover:bg-card sm:px-3"

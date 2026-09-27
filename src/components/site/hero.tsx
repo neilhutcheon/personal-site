@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import { profile } from "@/content/resume";
 import { cn } from "@/lib/utils";
+import { ProfileLinks } from "./profile-links";
 
 // Reason: on paper the hobby accents are too light for text, so phrases are highlighted blocks instead.
 const rotatingPhrases = [
@@ -60,6 +61,18 @@ export function Hero() {
             <MapPin className="size-3.5 text-primary" aria-hidden />
             {profile.location} · {profile.title}
           </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.05 }}
+            className="mt-3 flex max-w-xl items-start gap-2 text-sm font-bold sm:text-base"
+          >
+            <span aria-hidden className="relative mt-1.5 inline-flex size-2.5 shrink-0 sm:mt-2">
+              <span className="absolute inset-0 rounded-full bg-disc motion-safe:animate-ping" />
+              <span className="relative size-2.5 rounded-full border border-foreground bg-disc" />
+            </span>
+            {profile.availability}
+          </motion.p>
 
           <motion.h1
             id="hero-title"
@@ -82,7 +95,9 @@ export function Hero() {
             className="mt-8 text-xl font-medium sm:text-2xl"
           >
             I build{" "}
-            <span className="relative inline-grid align-bottom">
+            {/* Reason: the rotating phrase is drawn from data-text via ::before so the page text reads
+                as one clean sentence (the sr-only copy) instead of "…web apps.Production web apps…". */}
+            <span aria-hidden className="relative inline-grid align-bottom">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.span
                   key={phrase.text}
@@ -90,14 +105,16 @@ export function Hero() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: "-60%" }}
                   transition={{ duration: 0.35 }}
-                  className={cn("border-2 border-foreground px-2 font-bold", phrase.tone)}
-                >
-                  {phrase.text}.
-                </motion.span>
+                  data-text={`${phrase.text}.`}
+                  className={cn(
+                    "border-2 border-foreground px-2 font-bold before:content-[attr(data-text)]",
+                    phrase.tone,
+                  )}
+                />
               </AnimatePresence>
             </span>
             <span className="sr-only">
-              Production web apps, data and media pipelines, and Terraform-managed AWS infrastructure.
+              production web apps, data and media pipelines, and Terraform-managed AWS infrastructure.
             </span>
           </motion.p>
 
@@ -118,14 +135,15 @@ export function Hero() {
             transition={{ duration: 0.5, delay: 0.5 }}
             className="mt-8 flex flex-wrap gap-3"
           >
-            <a href="#experience" className={cn(buttonVariants({ size: "lg" }), "under-disc")}>
-              See my route
+            <a href="#projects" className={cn(buttonVariants({ size: "lg" }), "under-disc")}>
+              See my work
               <ArrowDown aria-hidden />
             </a>
             <a href={`mailto:${profile.email}`} className={buttonVariants({ variant: "outline", size: "lg" })}>
               <Mail aria-hidden />
               Get in touch
             </a>
+            <ProfileLinks className="contents" />
           </motion.div>
         </div>
 

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { profile, siteUrl } from "@/content/resume";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -19,14 +20,22 @@ const display = Bricolage_Grotesque({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  alternates: { canonical: "/" },
   title: "Neil Hutcheon — Senior Software Engineer",
   description:
     "Neil Hutcheon is a Minneapolis-based Senior Software Engineer building production web apps, data/media pipelines, and Terraform-managed AWS infrastructure. Also: climber, disc golfer, trombonist.",
   openGraph: {
     title: "Neil Hutcheon — Senior Software Engineer",
-    description:
-      "Production web apps, data pipelines, and cloud infrastructure. Off the keyboard: climbing, disc golf, and trombone.",
+    description: `Production web apps, data pipelines, and cloud infrastructure. ${profile.availability}`,
     type: "website",
+    url: "/",
+  },
+  // Reason: without a card type, X/Twitter shows a plain text card; it reuses the og:image.
+  twitter: {
+    card: "summary_large_image",
+    title: "Neil Hutcheon — Senior Software Engineer",
+    description: `Production web apps, data pipelines, and cloud infrastructure. ${profile.availability}`,
   },
 };
 

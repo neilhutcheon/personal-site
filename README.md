@@ -71,7 +71,10 @@ tests/lib/             # Vitest tests mirroring src/lib
 
 ## Editing content
 
-Professional copy lives in `src/content/resume.ts`. Keep it factual; it mirrors the resume.
+Professional copy lives in `src/content/resume.ts`. Keep it factual: it mirrors the resume plus
+project and stack details Neil has confirmed. The downloadable resume is `public/neil-hutcheon-resume.pdf`;
+replace that file to update it. The social preview card is generated at build time by
+`src/app/opengraph-image.tsx`, and `public/_headers` makes Cloudflare serve it as a PNG.
 Photos go in `public/photos/` and are rendered with `next/image`.
 
 ## Accessibility and motion
