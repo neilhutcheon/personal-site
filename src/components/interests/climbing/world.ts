@@ -78,6 +78,8 @@ export class ClimbingWorld {
   private puffs: { mesh: THREE.Mesh; v: THREE.Vector3; life: number }[] = [];
   private frame = 0;
   private resizeObserver: ResizeObserver;
+  private visibilityObserver: IntersectionObserver;
+  private onScreen = false;
   private pointerDown: { x: number; y: number } | null = null;
   private hover: string | null = null;
   private reachable = new Set<string>();
@@ -100,7 +102,9 @@ export class ClimbingWorld {
     private readonly onGrab: (id: string) => void,
   ) {
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    // Reason: at 2x with antialiasing the canvas is ~2.5M pixels a frame; 1.5x looks the same in
+    // this flat toon style and roughly halves the GPU work.
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.NoToneMapping;
     this.renderer.setClearColor(themeColor("var(--background)"));
@@ -161,7 +165,13 @@ export class ClimbingWorld {
     this.resizeObserver = new ResizeObserver(() => this.resize());
     this.resizeObserver.observe(this.host);
     this.resize();
-    this.frame = requestAnimationFrame(this.tick);
+    // Reason: rendering every frame while scrolled away pegged the CPU/GPU for the life of the page
+    // and could freeze Chrome, so the loop only runs while the wall is on screen.
+    this.visibilityObserver = new IntersectionObserver(([entry]) => {
+      this.onScreen = entry.isIntersecting;
+      if (this.onScreen) this.start();
+    });
+    this.visibilityObserver.observe(this.host);
   }
 
   sync(state: ClimbSync) {
@@ -191,8 +201,10 @@ export class ClimbingWorld {
     if (this.disposed) return;
     this.disposed = true;
     cancelAnimationFrame(this.frame);
+    this.frame = 0;
     this.abort.abort();
     this.resizeObserver.disconnect();
+    this.visibilityObserver.disconnect();
     this.controls.removeEventListener("start", this.cancelIntro);
     this.controls.dispose();
     this.clearChalk();
@@ -217,6 +229,13 @@ export class ClimbingWorld {
     this.renderer.dispose();
     this.renderer.forceContextLoss();
     this.renderer.domElement.remove();
+  }
+
+  private start() {
+    if (this.disposed || this.frame) return;
+    // Drop the time spent paused so animations resume where they left off instead of jumping.
+    this.clock.getDelta();
+    this.frame = requestAnimationFrame(this.tick);
   }
 
   private cancelIntro = () => {
@@ -339,6 +358,10 @@ export class ClimbingWorld {
 
   private tick = () => {
     if (this.disposed) return;
+    if (!this.onScreen) {
+      this.frame = 0;
+      return;
+    }
     this.frame = requestAnimationFrame(this.tick);
     const dt = Math.min(this.clock.getDelta(), 0.05);
     const time = this.clock.elapsedTime;
