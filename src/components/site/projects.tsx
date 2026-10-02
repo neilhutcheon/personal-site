@@ -1,6 +1,21 @@
-import { ArrowDown, ArrowRight, Cloud, Cpu, FileVideo, MessageSquareText, ScanFace } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowRight,
+  ArrowUpRight,
+  Cloud,
+  Cpu,
+  FileVideo,
+  MapPinned,
+  MessageSquareText,
+  Megaphone,
+  ScanFace,
+  Send,
+  Share2,
+  UsersRound,
+} from "lucide-react";
 import type { ReactNode } from "react";
 import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
 import { projects, type Project } from "@/content/resume";
 import { cn } from "@/lib/utils";
 import { Reveal } from "./motion";
@@ -13,7 +28,7 @@ const projectTones = [
 ];
 
 export function Projects() {
-  const [featured, ...rest] = projects;
+  const [own, featured, ...rest] = projects;
   return (
     <section
       id="projects"
@@ -25,14 +40,15 @@ export function Projects() {
           id="projects-title"
           eyebrow="Selected work"
           title="Problems I've owned end to end."
-          description="Three production systems: what the client needed, how I built it, and what it runs on."
+          description="A business of my own and three production systems for clients: what was needed, how I built it, and what it runs on."
         />
 
         <div className="mt-16 space-y-12">
+          <ProjectCard project={own} tone={projectTones[1]} diagram={<GigFlow />} />
           <ProjectCard project={featured} tone={projectTones[0]} diagram={<FerpaPipeline />} />
           <div className="grid gap-12 lg:grid-cols-2">
             {rest.map((project, i) => (
-              <ProjectCard key={project.id} project={project} tone={projectTones[(i + 1) % projectTones.length]} />
+              <ProjectCard key={project.id} project={project} tone={projectTones[(i + 2) % projectTones.length]} />
             ))}
           </div>
         </div>
@@ -61,9 +77,23 @@ function ProjectCard({
           {project.client}
           {project.period ? ` · ${project.period}` : null}
         </span>
-        <h3 id={`${project.id}-title`} className="font-heading text-2xl font-extrabold tracking-tight sm:text-3xl">
-          {project.name}
-        </h3>
+        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+          <h3 id={`${project.id}-title`} className="font-heading text-2xl font-extrabold tracking-tight sm:text-3xl">
+            {project.name}
+          </h3>
+          {project.url ? (
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(buttonVariants({ size: "sm" }), "under-disc")}
+            >
+              Visit {new URL(project.url).hostname}
+              <ArrowUpRight aria-hidden />
+              <span className="sr-only">(opens in a new tab)</span>
+            </a>
+          ) : null}
+        </div>
 
         <div className={cn("mt-6 grid gap-6", diagram && "lg:grid-cols-[1fr_1.1fr] lg:gap-10")}>
           <dl className="space-y-5 text-[0.95rem] leading-relaxed">
@@ -163,6 +193,50 @@ function FerpaPipeline() {
       <p className="mt-5 flex items-start gap-2 text-sm text-muted-foreground">
         <ArrowRight aria-hidden className="mt-0.5 size-4 shrink-0" strokeWidth={2.5} />
         Blurring runs on Paperspace GPUs for cost; everything after it runs as ECS tasks sized for cost efficiency.
+      </p>
+    </figure>
+  );
+}
+
+const gigSteps = [
+  { label: "Director posts a gig", where: "Supabase", Icon: Megaphone },
+  { label: "Musicians find it on the map", where: "Mapbox", Icon: MapPinned },
+  { label: "Open chairs get shared", where: "Link", Icon: Share2 },
+  { label: "Apply or audition by video", where: "Supabase", Icon: FileVideo },
+  { label: "Booked: roster + group thread", where: "Supabase", Icon: UsersRound },
+];
+
+/** How a gig gets filled on Descant, and which service carries each step. */
+function GigFlow() {
+  return (
+    <figure className="ruled self-start border-2 border-foreground bg-card p-4 sm:p-6">
+      <figcaption className="font-mono text-xs font-bold uppercase tracking-[0.2em]">
+        How a gig gets filled
+      </figcaption>
+      <ol className="mt-5 grid gap-2" aria-label="Descant gig flow">
+        {gigSteps.map(({ label, where, Icon }, i) => (
+          <li key={label} className="grid gap-2">
+            <div
+              className={cn(
+                "flex items-center gap-3 border-2 border-foreground px-3 py-2 shadow-brutal-sm",
+                i === gigSteps.length - 1 ? "bg-brass/50" : "bg-card",
+              )}
+            >
+              <span className="grid size-8 shrink-0 place-items-center border-2 border-foreground bg-card">
+                <Icon className="size-4" strokeWidth={2.5} aria-hidden />
+              </span>
+              <span className="font-heading font-bold">{label}</span>
+              <span className="ml-auto shrink-0 font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                {where}
+              </span>
+            </div>
+            {i < gigSteps.length - 1 ? <ArrowDown aria-hidden className="mx-auto size-4" strokeWidth={2.5} /> : null}
+          </li>
+        ))}
+      </ol>
+      <p className="mt-5 flex items-start gap-2 text-sm text-muted-foreground">
+        <Send aria-hidden className="mt-0.5 size-4 shrink-0" strokeWidth={2.5} />
+        Email from Resend keeps directors and musicians in the loop along the way.
       </p>
     </figure>
   );

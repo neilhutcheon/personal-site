@@ -13,7 +13,7 @@ export const profile = {
   github: "https://github.com/neilhutcheon",
   linkedin: "https://www.linkedin.com/in/neil-hutcheon-1a4a36182/",
   summary:
-    "Senior Software Engineer with 5+ years of experience building production web applications and data/media pipelines, promoted from Junior Engineer to Senior Engineer through consistent technical growth. Specializes in React/Node, Python, AWS, and Terraform-managed infrastructure, with recent focus on ground-up architecture and technical leadership.",
+    "Senior Software Engineer with 5+ years of experience building production web applications and data/media pipelines, promoted from Junior Engineer to Senior Engineer through consistent technical growth. Specializes in React/Node, Python, AWS, and Terraform-managed infrastructure, with recent focus on ground-up architecture and technical leadership. Outside client work, I founded and built Descant, a marketplace connecting church music directors with musicians.",
 } as const;
 
 export const stats = [
@@ -38,6 +38,8 @@ export const siteRepo = "https://github.com/neilhutcheon/personal-site";
 export type Role = {
   title: string;
   company: string;
+  /** Optional external link for the company, e.g. a business Neil runs. */
+  url?: string;
   period: string;
   /** Climbing-grade flavor text shown on the route timeline. */
   grade: string;
@@ -47,6 +49,24 @@ export type Role = {
 
 // Ordered newest first, matching the resume.
 export const roles: Role[] = [
+  {
+    title: "Founder & Engineer",
+    company: "Descant",
+    url: "https://joindescant.com/info",
+    period: "Side business · Now",
+    grade: "My project",
+    highlights: [
+      "Founded and built Descant, a marketplace where church music directors post open chairs and musicians find, share, and apply for them.",
+      "Own it end to end: product, design, and engineering on Supabase, with Mapbox for the gig map and Resend for email.",
+    ],
+    clients: [
+      {
+        name: "Descant",
+        detail: "Problem, architecture, and how a gig gets filled, from post to booked ensemble.",
+        project: "descant",
+      },
+    ],
+  },
   {
     title: "Senior Software Engineer",
     company: "Curve10 LLC",
@@ -111,6 +131,8 @@ export type Project = {
   name: string;
   client: string;
   period?: string;
+  /** Public link to the live product, shown as a button on the card. */
+  url?: string;
   problem: string;
   architecture: string[];
   stack: string[];
@@ -119,6 +141,25 @@ export type Project = {
 
 // Reason: no public usage figures yet, so results describe what shipped rather than invent numbers.
 export const projects: Project[] = [
+  {
+    id: "descant",
+    name: "Descant",
+    client: "Founder · my own business",
+    url: "https://joindescant.com/info",
+    problem:
+      "Church music directors need to fill open chairs for their services, and musicians need one place to find those paid gigs. Descant is a marketplace where directors post openings and musicians find, share, and apply for them.",
+    architecture: [
+      "I founded it and built it end to end, from the product and design to the back end.",
+      "Supabase is the back end for gigs, applications, and musician and director accounts.",
+      "A Mapbox gig map with filters and a \"For me\" view matched to each musician's instrument and availability.",
+      "Higher-paying gigs can ask for a video audition; booked gigs get an ensemble roster and a group message thread.",
+      "Share links for open chairs open straight to the gig and walk new musicians through sign-up, so the network grows through the musicians already on it.",
+      "Resend sends the email that keeps directors and musicians in the loop.",
+    ],
+    stack: ["Supabase", "PostgreSQL", "Mapbox", "Resend"],
+    result:
+      "Live at joindescant.com: a business I founded, designed, and built myself, from idea to launch.",
+  },
   {
     id: "umich",
     name: "FERPA-compliant classroom video AI",
@@ -171,8 +212,8 @@ export const projects: Project[] = [
 
 export const skillGroups = [
   { name: "Languages", items: ["TypeScript", "JavaScript", "Python", "Bash"] },
-  { name: "Front end", items: ["React", "Next.js", "React Native", ".NET MAUI", "PWAs", "Three.js"] },
-  { name: "Back end", items: ["Node.js", "Serverless APIs", "Real-time messaging", "Pandas", "Plotly"] },
+  { name: "Front end", items: ["React", "Next.js", "React Native", ".NET MAUI", "PWAs", "Three.js", "Mapbox"] },
+  { name: "Back end", items: ["Node.js", "Supabase", "Serverless APIs", "Real-time messaging", "Resend", "Pandas", "Plotly"] },
   { name: "Databases", items: ["PostgreSQL", "TimescaleDB", "DynamoDB", "MongoDB"] },
   {
     name: "AWS",
