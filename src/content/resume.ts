@@ -13,7 +13,7 @@ export const profile = {
   github: "https://github.com/neilhutcheon",
   linkedin: "https://www.linkedin.com/in/neil-hutcheon-1a4a36182/",
   summary:
-    "Senior Software Engineer with 5+ years of experience building production web applications and data/media pipelines, promoted from Junior Engineer to Senior Engineer through consistent technical growth. Specializes in React/Node, Python, AWS, and Terraform-managed infrastructure, with recent focus on ground-up architecture and technical leadership.",
+    "Senior Software Engineer with 5+ years of experience building production web applications and data/media pipelines, promoted from Junior Engineer to Senior Engineer through consistent technical growth. Specializes in React/Node, Python, AWS, and Terraform-managed infrastructure, with recent focus on ground-up architecture and technical leadership. Outside client work, I founded Descant LLC and built Descant, a marketplace connecting Twin Cities church music directors with freelance musicians.",
 } as const;
 
 export const stats = [
@@ -38,6 +38,8 @@ export const siteRepo = "https://github.com/neilhutcheon/personal-site";
 export type Role = {
   title: string;
   company: string;
+  /** Optional external link for the company, e.g. a business Neil runs. */
+  url?: string;
   period: string;
   /** Climbing-grade flavor text shown on the route timeline. */
   grade: string;
@@ -47,6 +49,24 @@ export type Role = {
 
 // Ordered newest first, matching the resume.
 export const roles: Role[] = [
+  {
+    title: "Founder & Engineer",
+    company: "Descant LLC",
+    url: "https://joindescant.com/info",
+    period: "09/2026 – Present",
+    grade: "My project",
+    highlights: [
+      "Founded Descant LLC and built Descant, a marketplace connecting Twin Cities church music directors with freelance musicians for services, holidays, weddings and concerts.",
+      "Own it end to end: product, design, and engineering, from the React app and Supabase back end to Mapbox maps and Resend email. Live in a free pilot.",
+    ],
+    clients: [
+      {
+        name: "Descant",
+        detail: "Problem, architecture, and how a gig gets filled, from post to booked ensemble.",
+        project: "descant",
+      },
+    ],
+  },
   {
     title: "Senior Software Engineer",
     company: "Curve10 LLC",
@@ -111,6 +131,8 @@ export type Project = {
   name: string;
   client: string;
   period?: string;
+  /** Public link to the live product, shown as a button on the card. */
+  url?: string;
   problem: string;
   architecture: string[];
   stack: string[];
@@ -119,6 +141,27 @@ export type Project = {
 
 // Reason: no public usage figures yet, so results describe what shipped rather than invent numbers.
 export const projects: Project[] = [
+  {
+    id: "descant",
+    name: "Descant",
+    client: "Founder · Descant LLC",
+    period: "2026 – Present",
+    url: "https://joindescant.com/info",
+    problem:
+      "Church music directors in the Twin Cities hire freelance musicians for services, holidays, weddings and concerts. Descant handles it from posting the gig to getting everyone their part: directors post the chairs they need, musicians find and apply, and booked players get their music and one group thread.",
+    architecture: [
+      "I founded Descant LLC and built the product end to end: product, design, and engineering.",
+      "A React app on Supabase, which handles the database, emailed sign-in links (no passwords), and file storage. Hosted on Cloudflare.",
+      "Mapbox maps and address search show gigs by distance, with an OpenStreetMap fallback; home locations are rounded to about a kilometer for privacy.",
+      "Directors review applicants' instruments, experience, references and ratings, then book players; open chairs update on their own. They can also reserve a chair with a private invite link.",
+      "A music library: a director uploads a piece once, and each booked player sees their own part first.",
+      "Resend sends the email: booking details, new-gig alerts, and reference requests that turn into recommendations on a musician's profile.",
+      "Director accounts are approved by an admin, musicians give private feedback after each gig, and Sentry reports errors with private links stripped out.",
+    ],
+    stack: ["React", "Supabase", "PostgreSQL", "Mapbox", "Resend", "Cloudflare", "Sentry"],
+    result:
+      "Live at joindescant.com in a free pilot with churches and musicians across the Twin Cities, run as my own company.",
+  },
   {
     id: "umich",
     name: "FERPA-compliant classroom video AI",
@@ -171,14 +214,14 @@ export const projects: Project[] = [
 
 export const skillGroups = [
   { name: "Languages", items: ["TypeScript", "JavaScript", "Python", "Bash"] },
-  { name: "Front end", items: ["React", "Next.js", "React Native", ".NET MAUI", "PWAs", "Three.js"] },
-  { name: "Back end", items: ["Node.js", "Serverless APIs", "Real-time messaging", "Pandas", "Plotly"] },
+  { name: "Front end", items: ["React", "Next.js", "React Native", ".NET MAUI", "PWAs", "Three.js", "Mapbox"] },
+  { name: "Back end", items: ["Node.js", "Supabase", "Serverless APIs", "Real-time messaging", "Resend", "Pandas", "Plotly"] },
   { name: "Databases", items: ["PostgreSQL", "TimescaleDB", "DynamoDB", "MongoDB"] },
   {
     name: "AWS",
     items: ["Lambda", "ECS", "EC2", "S3", "CloudFront", "SQS", "Step Functions", "VPC"],
   },
-  { name: "Infrastructure", items: ["Terraform (multi-environment)", "Docker", "Linux", "GitHub Actions", "Git"] },
+  { name: "Infrastructure", items: ["Terraform (multi-environment)", "Docker", "Cloudflare", "Linux", "GitHub Actions", "Git"] },
   { name: "Testing", items: ["Jest", "Playwright", "Vitest"] },
   { name: "AI tooling", items: ["Claude Code", "Cursor", "Google Antigravity", "AI video pipelines"] },
 ] as const;

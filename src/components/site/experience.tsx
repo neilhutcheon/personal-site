@@ -40,7 +40,7 @@ export function Experience() {
           id="experience-title"
           eyebrow="Experience"
           title="The route so far."
-          description={`Four roles at ${company.name}, ${company.blurb}, from part-time junior engineer in 2021 to senior engineer owning architecture today. Read it top-down like a topo: the crux is where I am now.`}
+          description={`Four roles at ${company.name}, ${company.blurb}, from part-time junior engineer in 2021 to senior engineer owning architecture today, plus Descant, the business I founded on the side. Read it top-down like a topo: the crux is where I am now.`}
         />
 
         <div ref={routeRef} className="relative mt-16 pl-12 sm:pl-16">
@@ -74,13 +74,27 @@ export function Experience() {
               <Reveal>
                 <article className={cn("stack relative bg-card p-6 pt-8 sm:p-8 sm:pt-9", tone.under)}>
                   {/* Period rides the top edge like a folder tab. */}
-                  <span className={cn("tab", tone.bg, i === 3 && "text-primary-foreground")}>{role.period}</span>
+                  <span className={cn("tab", tone.bg, tone.bg === "bg-primary" && "text-primary-foreground")}>{role.period}</span>
                   <header className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
                     <div>
                       <h3 className="font-heading text-xl font-extrabold sm:text-2xl">{role.title}</h3>
-                      <p className="font-medium text-muted-foreground">{role.company}</p>
+                      <p className="font-medium text-muted-foreground">
+                        {role.url ? (
+                          <a
+                            href={role.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="underline decoration-2 underline-offset-4 hover:text-primary"
+                          >
+                            {role.company}
+                            <span className="sr-only"> (opens in a new tab)</span>
+                          </a>
+                        ) : (
+                          role.company
+                        )}
+                      </p>
                     </div>
-                    <Badge variant="outline" className={i === 0 ? "bg-brass" : undefined}>
+                    <Badge variant="outline" className={role.grade === "Crux" ? "bg-brass" : undefined}>
                       {role.grade}
                     </Badge>
                   </header>
