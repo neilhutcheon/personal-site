@@ -53,7 +53,7 @@ export const roles: Role[] = [
     title: "Founder & Engineer",
     company: "Descant LLC",
     url: "https://joindescant.com/info",
-    period: "Side business · Now",
+    period: "09/2026 – Present",
     grade: "My project",
     highlights: [
       "Founded Descant LLC and built Descant, a marketplace connecting Twin Cities church music directors with freelance musicians for services, holidays, weddings and concerts.",
@@ -145,6 +145,7 @@ export const projects: Project[] = [
     id: "descant",
     name: "Descant",
     client: "Founder · Descant LLC",
+    period: "2026 – Present",
     url: "https://joindescant.com/info",
     problem:
       "Church music directors in the Twin Cities hire freelance musicians for services, holidays, weddings and concerts. Descant handles it from posting the gig to getting everyone their part: directors post the chairs they need, musicians find and apply, and booked players get their music and one group thread.",
