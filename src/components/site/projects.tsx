@@ -199,11 +199,11 @@ function FerpaPipeline() {
 }
 
 const gigSteps = [
-  { label: "Director posts a gig", where: "Supabase", Icon: Megaphone },
+  { label: "Director posts the gig and chairs", where: "Supabase", Icon: Megaphone },
   { label: "Musicians find it on the map", where: "Mapbox", Icon: MapPinned },
-  { label: "Open chairs get shared", where: "Link", Icon: Share2 },
-  { label: "Apply or audition by video", where: "Supabase", Icon: FileVideo },
-  { label: "Booked: roster + group thread", where: "Supabase", Icon: UsersRound },
+  { label: "Apply with profile and references", where: "Supabase", Icon: UsersRound },
+  { label: "Director books the players", where: "Resend", Icon: Send },
+  { label: "Booked: parts, details, group thread", where: "Supabase", Icon: MessageSquareText },
 ];
 
 /** How a gig gets filled on Descant, and which service carries each step. */
@@ -235,8 +235,8 @@ function GigFlow() {
         ))}
       </ol>
       <p className="mt-5 flex items-start gap-2 text-sm text-muted-foreground">
-        <Send aria-hidden className="mt-0.5 size-4 shrink-0" strokeWidth={2.5} />
-        Email from Resend keeps directors and musicians in the loop along the way.
+        <Share2 aria-hidden className="mt-0.5 size-4 shrink-0" strokeWidth={2.5} />
+        Or skip the line: a director can reserve a chair and send a private invite link, and whoever accepts first gets it.
       </p>
     </figure>
   );

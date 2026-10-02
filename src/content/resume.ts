@@ -13,7 +13,7 @@ export const profile = {
   github: "https://github.com/neilhutcheon",
   linkedin: "https://www.linkedin.com/in/neil-hutcheon-1a4a36182/",
   summary:
-    "Senior Software Engineer with 5+ years of experience building production web applications and data/media pipelines, promoted from Junior Engineer to Senior Engineer through consistent technical growth. Specializes in React/Node, Python, AWS, and Terraform-managed infrastructure, with recent focus on ground-up architecture and technical leadership. Outside client work, I founded and built Descant, a marketplace connecting church music directors with musicians.",
+    "Senior Software Engineer with 5+ years of experience building production web applications and data/media pipelines, promoted from Junior Engineer to Senior Engineer through consistent technical growth. Specializes in React/Node, Python, AWS, and Terraform-managed infrastructure, with recent focus on ground-up architecture and technical leadership. Outside client work, I founded Descant LLC and built Descant, a marketplace connecting Twin Cities church music directors with freelance musicians.",
 } as const;
 
 export const stats = [
@@ -51,13 +51,13 @@ export type Role = {
 export const roles: Role[] = [
   {
     title: "Founder & Engineer",
-    company: "Descant",
+    company: "Descant LLC",
     url: "https://joindescant.com/info",
     period: "Side business · Now",
     grade: "My project",
     highlights: [
-      "Founded and built Descant, a marketplace where church music directors post open chairs and musicians find, share, and apply for them.",
-      "Own it end to end: product, design, and engineering on Supabase, with Mapbox for the gig map and Resend for email.",
+      "Founded Descant LLC and built Descant, a marketplace connecting Twin Cities church music directors with freelance musicians for services, holidays, weddings and concerts.",
+      "Own it end to end: product, design, and engineering, from the React app and Supabase back end to Mapbox maps and Resend email. Live in a free pilot.",
     ],
     clients: [
       {
@@ -144,21 +144,22 @@ export const projects: Project[] = [
   {
     id: "descant",
     name: "Descant",
-    client: "Founder · my own business",
+    client: "Founder · Descant LLC",
     url: "https://joindescant.com/info",
     problem:
-      "Church music directors need to fill open chairs for their services, and musicians need one place to find those paid gigs. Descant is a marketplace where directors post openings and musicians find, share, and apply for them.",
+      "Church music directors in the Twin Cities hire freelance musicians for services, holidays, weddings and concerts. Descant handles it from posting the gig to getting everyone their part: directors post the chairs they need, musicians find and apply, and booked players get their music and one group thread.",
     architecture: [
-      "I founded it and built it end to end, from the product and design to the back end.",
-      "Supabase is the back end for gigs, applications, and musician and director accounts.",
-      "A Mapbox gig map with filters and a \"For me\" view matched to each musician's instrument and availability.",
-      "Higher-paying gigs can ask for a video audition; booked gigs get an ensemble roster and a group message thread.",
-      "Share links for open chairs open straight to the gig and walk new musicians through sign-up, so the network grows through the musicians already on it.",
-      "Resend sends the email that keeps directors and musicians in the loop.",
+      "I founded Descant LLC and built the product end to end: product, design, and engineering.",
+      "A React app on Supabase, which handles the database, emailed sign-in links (no passwords), and file storage. Hosted on Cloudflare.",
+      "Mapbox maps and address search show gigs by distance, with an OpenStreetMap fallback; home locations are rounded to about a kilometer for privacy.",
+      "Directors review applicants' instruments, experience, references and ratings, then book players; open chairs update on their own. They can also reserve a chair with a private invite link.",
+      "A music library: a director uploads a piece once, and each booked player sees their own part first.",
+      "Resend sends the email: booking details, new-gig alerts, and reference requests that turn into recommendations on a musician's profile.",
+      "Director accounts are approved by an admin, musicians give private feedback after each gig, and Sentry reports errors with private links stripped out.",
     ],
-    stack: ["Supabase", "PostgreSQL", "Mapbox", "Resend"],
+    stack: ["React", "Supabase", "PostgreSQL", "Mapbox", "Resend", "Cloudflare", "Sentry"],
     result:
-      "Live at joindescant.com: a business I founded, designed, and built myself, from idea to launch.",
+      "Live at joindescant.com in a free pilot with churches and musicians across the Twin Cities, run as my own company.",
   },
   {
     id: "umich",
@@ -219,7 +220,7 @@ export const skillGroups = [
     name: "AWS",
     items: ["Lambda", "ECS", "EC2", "S3", "CloudFront", "SQS", "Step Functions", "VPC"],
   },
-  { name: "Infrastructure", items: ["Terraform (multi-environment)", "Docker", "Linux", "GitHub Actions", "Git"] },
+  { name: "Infrastructure", items: ["Terraform (multi-environment)", "Docker", "Cloudflare", "Linux", "GitHub Actions", "Git"] },
   { name: "Testing", items: ["Jest", "Playwright", "Vitest"] },
   { name: "AI tooling", items: ["Claude Code", "Cursor", "Google Antigravity", "AI video pipelines"] },
 ] as const;
