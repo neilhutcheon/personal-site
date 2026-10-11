@@ -172,6 +172,21 @@ export const projects: Project[] = [
     result: "Active since my 2021 prototypes: teachers get automatic feedback while student identities stay protected.",
   },
   {
+    id: "dominus",
+    name: "MGAM – Dominus Baseball",
+    client: "MGAM",
+    problem:
+      "Fantasy baseball where owners run whole franchises and their teams play a full simulated game every day, built from players' real play-by-play.",
+    architecture: [
+      "A simulation engine plays each plate appearance from the batter's or pitcher's real events, adjusted with linear weights for defense and baserunning, and seeded so any game replays exactly.",
+      "A nightly Step Functions pipeline imports real stats, fans each game out to its own Lambda worker through SQS, and releases scores on a schedule.",
+      "A serverless Express API over PostgreSQL with TimescaleDB, a React front end, and Socket.IO league chat on Fargate.",
+    ],
+    stack: ["Node.js", "React", "PostgreSQL", "TimescaleDB", "AWS Lambda", "Step Functions", "Socket.IO", "Terraform"],
+    result:
+      "Architected from the ground up: five repos and about 144,000 lines, with every environment in Terraform. One of the three production apps I own.",
+  },
+  {
     id: "whiteflag",
     name: "WhiteFlag: Rownd to SuperTokens",
     client: "WhiteFlag",
@@ -186,19 +201,6 @@ export const projects: Project[] = [
     stack: [".NET MAUI", "ASP.NET", "Node.js", "SuperTokens", "Twilio", "AWS Fargate", "Claude Code"],
     result:
       "Production sign-in moved about a week after the go decision, with Claude Code doing the hands-on work under my direction.",
-  },
-  {
-    id: "dominus",
-    name: "MGAM – Dominus Baseball",
-    client: "MGAM",
-    problem:
-      "Fantasy baseball that simulates games from real-world performance data, so managers' decisions play out like they would on a real club.",
-    architecture: [
-      "Architected from the ground up, including all infrastructure.",
-      "A serverless API over TimescaleDB, a React front end, and real-time messaging built in-house.",
-    ],
-    stack: ["React", "Node.js", "TimescaleDB", "Serverless API", "Terraform"],
-    result: "One of the three production applications I own as senior engineer.",
   },
   {
     id: "jhrea",

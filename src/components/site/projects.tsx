@@ -1,18 +1,19 @@
 import {
   ArrowDown,
   ArrowUpRight,
+  ClipboardList,
   Cloud,
   Cpu,
+  Database,
+  Dices,
   FileVideo,
-  KeyRound,
+  Lock,
   MapPinned,
   Megaphone,
   MessageSquareText,
+  MessagesSquare,
   ScanFace,
   Send,
-  ShieldCheck,
-  Smartphone,
-  UserRoundCheck,
   UsersRound,
 } from "lucide-react";
 import type { ReactNode } from "react";
@@ -30,7 +31,7 @@ const projectTones = [
 ];
 
 export function Projects() {
-  const [own, featured, migration, ...rest] = projects;
+  const [own, featured, flagship, ...rest] = projects;
   return (
     <section
       id="projects"
@@ -48,10 +49,10 @@ export function Projects() {
         <div className="mt-12 space-y-8">
           <ProjectCard project={own} tone={projectTones[1]} diagram={<GigFlow />} />
           <ProjectCard project={featured} tone={projectTones[0]} diagram={<FerpaPipeline />} />
-          <ProjectCard project={migration} tone={projectTones[2]} diagram={<SignInFlow />} />
+          <ProjectCard project={flagship} tone={projectTones[2]} diagram={<GameDay />} />
           <div className="grid gap-8 lg:grid-cols-2">
             {rest.map((project, i) => (
-              <ProjectCard key={project.id} project={project} tone={projectTones[i % projectTones.length]} />
+              <ProjectCard key={project.id} project={project} tone={projectTones[(i + 1) % 2]} />
             ))}
           </div>
         </div>
@@ -237,28 +238,28 @@ function GigFlow() {
   );
 }
 
-const signInSteps = [
-  { label: "Enter phone number", where: ".NET MAUI app", Icon: Smartphone },
-  { label: "Text a 6-digit code", where: "Twilio", Icon: MessageSquareText },
-  { label: "Check code, issue session", where: "Node · Fargate", Icon: KeyRound, swapped: true },
-  { label: "Verify the token", where: "WhiteFlag API", Icon: ShieldCheck },
-  { label: "Land on your account", where: "Rownd ID kept", Icon: UserRoundCheck },
+const gameDaySteps = [
+  { label: "Lock lineups at noon", where: "EventBridge", Icon: Lock },
+  { label: "Import real play-by-play", where: "Step Functions", Icon: Database },
+  { label: "Simulate every game", where: "SQS · Lambda", Icon: Dices, engine: true },
+  { label: "Release box scores", where: "Scheduled Lambda", Icon: ClipboardList },
+  { label: "Owners follow along", where: "React · Socket.IO", Icon: MessagesSquare },
 ];
 
-/** WhiteFlag sign-in after the migration, showing which step replaced Rownd. */
-function SignInFlow() {
+/** Dominus's nightly game-day pipeline, from locked lineups to released scores. */
+function GameDay() {
   return (
     <figure className="ruled self-start border-2 border-foreground bg-card p-4 sm:p-5">
       <figcaption className="font-mono text-xs font-bold uppercase tracking-[0.2em]">
-        Sign-in · where Rownd used to be
+        Game day · lineups to box scores
       </figcaption>
-      <ol className="mt-4 grid gap-1" aria-label="WhiteFlag sign-in steps">
-        {signInSteps.map(({ label, where, Icon, swapped }, i) => (
+      <ol className="mt-4 grid gap-1" aria-label="Dominus game-day steps">
+        {gameDaySteps.map(({ label, where, Icon, engine }, i) => (
           <li key={label} className="grid gap-1">
             <div
               className={cn(
                 "flex items-center gap-3 border-2 border-foreground px-3 py-1.5 shadow-brutal-sm",
-                swapped ? "bg-climb/50" : "bg-card",
+                engine ? "bg-climb/50" : "bg-card",
               )}
             >
               <span className="grid size-7 shrink-0 place-items-center border-2 border-foreground bg-card">
@@ -268,9 +269,9 @@ function SignInFlow() {
               <span className="ml-auto shrink-0 font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground">
                 {where}
               </span>
-              {swapped ? <span className="sr-only">(replaces Rownd, backed by managed SuperTokens)</span> : null}
+              {engine ? <span className="sr-only">(the simulation engine, one worker per game)</span> : null}
             </div>
-            {i < signInSteps.length - 1 ? <ArrowDown aria-hidden className="mx-auto size-3.5" strokeWidth={2.5} /> : null}
+            {i < gameDaySteps.length - 1 ? <ArrowDown aria-hidden className="mx-auto size-3.5" strokeWidth={2.5} /> : null}
           </li>
         ))}
       </ol>
