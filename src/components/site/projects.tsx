@@ -2,15 +2,20 @@ import {
   ArrowDown,
   ArrowRight,
   ArrowUpRight,
+  Bot,
   Cloud,
   Cpu,
   FileVideo,
+  KeyRound,
   MapPinned,
-  MessageSquareText,
   Megaphone,
+  MessageSquareText,
   ScanFace,
   Send,
   Share2,
+  ShieldCheck,
+  Smartphone,
+  UserRoundCheck,
   UsersRound,
 } from "lucide-react";
 import type { ReactNode } from "react";
@@ -28,7 +33,7 @@ const projectTones = [
 ];
 
 export function Projects() {
-  const [own, featured, ...rest] = projects;
+  const [own, featured, migration, ...rest] = projects;
   return (
     <section
       id="projects"
@@ -40,15 +45,16 @@ export function Projects() {
           id="projects-title"
           eyebrow="Selected work"
           title="Problems I've owned end to end."
-          description="A business of my own and three production systems for clients: what was needed, how I built it, and what it runs on."
+          description="A business of my own and the production systems I've built and rescued for clients: what was needed, how I built it, and what it runs on."
         />
 
         <div className="mt-16 space-y-12">
           <ProjectCard project={own} tone={projectTones[1]} diagram={<GigFlow />} />
           <ProjectCard project={featured} tone={projectTones[0]} diagram={<FerpaPipeline />} />
+          <ProjectCard project={migration} tone={projectTones[2]} diagram={<SignInFlow />} />
           <div className="grid gap-12 lg:grid-cols-2">
             {rest.map((project, i) => (
-              <ProjectCard key={project.id} project={project} tone={projectTones[(i + 2) % projectTones.length]} />
+              <ProjectCard key={project.id} project={project} tone={projectTones[i % projectTones.length]} />
             ))}
           </div>
         </div>
@@ -237,6 +243,51 @@ function GigFlow() {
       <p className="mt-5 flex items-start gap-2 text-sm text-muted-foreground">
         <Share2 aria-hidden className="mt-0.5 size-4 shrink-0" strokeWidth={2.5} />
         Or skip the line: a director can reserve a chair and send a private invite link, and whoever accepts first gets it.
+      </p>
+    </figure>
+  );
+}
+
+const signInSteps = [
+  { label: "Enter phone number", where: ".NET MAUI app", Icon: Smartphone },
+  { label: "Text a 6-digit code", where: "Twilio", Icon: MessageSquareText },
+  { label: "Check code, issue session", where: "Node · Fargate", Icon: KeyRound, swapped: true },
+  { label: "Verify the token", where: "WhiteFlag API", Icon: ShieldCheck },
+  { label: "Land on your account", where: "Rownd ID kept", Icon: UserRoundCheck },
+];
+
+/** WhiteFlag sign-in after the migration, showing which step replaced Rownd. */
+function SignInFlow() {
+  return (
+    <figure className="ruled self-start border-2 border-foreground bg-card p-4 sm:p-6">
+      <figcaption className="font-mono text-xs font-bold uppercase tracking-[0.2em]">
+        Sign-in · where Rownd used to be
+      </figcaption>
+      <ol className="mt-5 grid gap-2" aria-label="WhiteFlag sign-in steps">
+        {signInSteps.map(({ label, where, Icon, swapped }, i) => (
+          <li key={label} className="grid gap-2">
+            <div
+              className={cn(
+                "flex items-center gap-3 border-2 border-foreground px-3 py-2 shadow-brutal-sm",
+                swapped ? "bg-climb/50" : "bg-card",
+              )}
+            >
+              <span className="grid size-8 shrink-0 place-items-center border-2 border-foreground bg-card">
+                <Icon className="size-4" strokeWidth={2.5} aria-hidden />
+              </span>
+              <span className="font-heading font-bold">{label}</span>
+              <span className="ml-auto shrink-0 font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                {where}
+              </span>
+              {swapped ? <span className="sr-only">(replaces Rownd, backed by managed SuperTokens)</span> : null}
+            </div>
+            {i < signInSteps.length - 1 ? <ArrowDown aria-hidden className="mx-auto size-4" strokeWidth={2.5} /> : null}
+          </li>
+        ))}
+      </ol>
+      <p className="mt-5 flex items-start gap-2 text-sm text-muted-foreground">
+        <Bot aria-hidden className="mt-0.5 size-4 shrink-0" strokeWidth={2.5} />
+        Planned in a Claude Project and built with Claude Code on my machine; I approved every push, deploy and production change.
       </p>
     </figure>
   );

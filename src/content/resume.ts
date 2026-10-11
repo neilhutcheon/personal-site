@@ -180,6 +180,34 @@ export const projects: Project[] = [
       "An active engagement since my first prototypes in 2021: teachers get automatic feedback on their classroom practice while student identities stay protected.",
   },
   {
+    id: "whiteflag",
+    name: "WhiteFlag: Rownd to SuperTokens",
+    client: "WhiteFlag",
+    period: "2026",
+    problem:
+      "WhiteFlag's .NET MAUI app signed people in through Rownd, which was shutting down. The vendor's plan called it a four-line SDK swap, but the API also checked every token and read profiles through Rownd, and the SuperTokens wrapper was a beta that needed a .NET 10 upgrade.",
+    architecture: [
+      "I estimated the drop-in wrapper against a do-it-yourself build, then chose to stay on .NET 9 and own the sign-in instead of waiting on the beta.",
+      "A new Node auth server runs supertokens-node in front of managed SuperTokens: 6-digit codes by text through Twilio, sessions and refresh, and the profile fields Rownd used to hold.",
+      "It runs on ECS Fargate behind the API's existing load balancers, with secrets in SSM, so stage and production went live without new DNS.",
+      "Transferred users keep their Rownd ID as their SuperTokens ID, so everyone lands on their existing account with no database changes.",
+      "The ASP.NET API verifies SuperTokens tokens against the server's keys, with a switch that kept the old app on Rownd during the changeover.",
+      "In the app, Rownd's SDK is gone: phone, code and username screens rebuilt from the old login pages, plus the store fixes the release surfaced in Azure Pipelines.",
+    ],
+    stack: [
+      ".NET MAUI",
+      "ASP.NET",
+      "Node.js",
+      "SuperTokens",
+      "Twilio",
+      "AWS ECS Fargate",
+      "Azure Pipelines",
+      "Claude Code",
+    ],
+    result:
+      "Production sign-in moved to SuperTokens about a week after the go decision, and the 1.5.1 release makes no calls to Rownd. Claude Code did the hands-on work under my direction, from the estimates to the build, AWS deploys and emulator testing.",
+  },
+  {
     id: "dominus",
     name: "MGAM – Dominus Baseball",
     client: "MGAM",
