@@ -148,19 +148,14 @@ export const projects: Project[] = [
     period: "2026 – Present",
     url: "https://joindescant.com/info",
     problem:
-      "Church music directors in the Twin Cities hire freelance musicians for services, holidays, weddings and concerts. Descant handles it from posting the gig to getting everyone their part: directors post the chairs they need, musicians find and apply, and booked players get their music and one group thread.",
+      "Twin Cities church music directors hire freelance musicians for services, weddings and concerts. Descant takes a gig from posted chairs to a booked ensemble with their parts.",
     architecture: [
-      "I founded Descant LLC and built the product end to end: product, design, and engineering.",
-      "A React app on Supabase, which handles the database, emailed sign-in links (no passwords), and file storage. Hosted on Cloudflare.",
-      "Mapbox maps and address search show gigs by distance, with an OpenStreetMap fallback; home locations are rounded to about a kilometer for privacy.",
-      "Directors review applicants' instruments, experience, references and ratings, then book players; open chairs update on their own. They can also reserve a chair with a private invite link.",
-      "A music library: a director uploads a piece once, and each booked player sees their own part first.",
-      "Resend sends the email: booking details, new-gig alerts, and reference requests that turn into recommendations on a musician's profile.",
-      "Director accounts are approved by an admin, musicians give private feedback after each gig, and Sentry reports errors with private links stripped out.",
+      "Founded the company and built it end to end: product, design and engineering.",
+      "React on Supabase (database, emailed sign-in links, file storage), hosted on Cloudflare.",
+      "Mapbox shows gigs by distance; Resend sends bookings, alerts and reference requests.",
     ],
     stack: ["React", "Supabase", "PostgreSQL", "Mapbox", "Resend", "Cloudflare", "Sentry"],
-    result:
-      "Live at joindescant.com in a free pilot with churches and musicians across the Twin Cities, run as my own company.",
+    result: "Live at joindescant.com in a free pilot across the Twin Cities, run as my own company.",
   },
   {
     id: "umich",
@@ -168,16 +163,13 @@ export const projects: Project[] = [
     client: "University of Michigan",
     period: "2021 – Present",
     problem:
-      "Researchers needed AI feedback for teachers from recorded classroom video, but the footage shows students, so it has to stay FERPA-compliant from the moment it lands.",
+      "Researchers wanted AI feedback for teachers from classroom video, but the footage shows students, so it must stay FERPA-compliant from upload on.",
     architecture: [
-      "Uploads land in S3 and trigger the pipeline.",
-      "Faces are blurred first, on Paperspace GPUs, which cost less than equivalent AWS GPU instances.",
-      "Only de-identified video moves on to transcription and AI analysis, which run as ECS tasks sized for cost efficiency.",
-      "The analysis produces automated feedback for each teacher.",
+      "Uploads land in S3; faces are blurred first on Paperspace GPUs, cheaper than AWS GPUs.",
+      "Only de-identified video moves on to transcription and AI analysis on cost-sized ECS tasks.",
     ],
     stack: ["Python", "AWS S3", "AWS ECS", "Paperspace"],
-    result:
-      "An active engagement since my first prototypes in 2021: teachers get automatic feedback on their classroom practice while student identities stay protected.",
+    result: "Active since my 2021 prototypes: teachers get automatic feedback while student identities stay protected.",
   },
   {
     id: "whiteflag",
@@ -185,58 +177,41 @@ export const projects: Project[] = [
     client: "WhiteFlag",
     period: "2026",
     problem:
-      "WhiteFlag's .NET MAUI app signed people in through Rownd, which was shutting down. The vendor's plan called it a four-line SDK swap, but the API also checked every token and read profiles through Rownd, and the SuperTokens wrapper was a beta that needed a .NET 10 upgrade.",
+      "Rownd, the sign-in service behind WhiteFlag's .NET MAUI app and API, was shutting down, and the drop-in SuperTokens wrapper was a beta that needed a .NET 10 upgrade.",
     architecture: [
-      "I estimated the drop-in wrapper against a do-it-yourself build, then chose to stay on .NET 9 and own the sign-in instead of waiting on the beta.",
-      "A new Node auth server runs supertokens-node in front of managed SuperTokens: 6-digit codes by text through Twilio, sessions and refresh, and the profile fields Rownd used to hold.",
-      "It runs on ECS Fargate behind the API's existing load balancers, with secrets in SSM, so stage and production went live without new DNS.",
-      "Transferred users keep their Rownd ID as their SuperTokens ID, so everyone lands on their existing account with no database changes.",
-      "The ASP.NET API verifies SuperTokens tokens against the server's keys, with a switch that kept the old app on Rownd during the changeover.",
-      "In the app, Rownd's SDK is gone: phone, code and username screens rebuilt from the old login pages, plus the store fixes the release surfaced in Azure Pipelines.",
+      "Stayed on .NET 9 and owned sign-in: a Node auth server on supertokens-node, codes by text via Twilio.",
+      "Runs on ECS Fargate behind the existing load balancers; users keep their Rownd IDs, so no data changes.",
+      "The API verifies SuperTokens tokens; the app's Rownd SDK is replaced with native sign-in screens.",
     ],
-    stack: [
-      ".NET MAUI",
-      "ASP.NET",
-      "Node.js",
-      "SuperTokens",
-      "Twilio",
-      "AWS ECS Fargate",
-      "Azure Pipelines",
-      "Claude Code",
-    ],
+    stack: [".NET MAUI", "ASP.NET", "Node.js", "SuperTokens", "Twilio", "AWS Fargate", "Claude Code"],
     result:
-      "Production sign-in moved to SuperTokens about a week after the go decision, and the 1.5.1 release makes no calls to Rownd. Claude Code did the hands-on work under my direction, from the estimates to the build, AWS deploys and emulator testing.",
+      "Production sign-in moved about a week after the go decision, with Claude Code doing the hands-on work under my direction.",
   },
   {
     id: "dominus",
     name: "MGAM – Dominus Baseball",
     client: "MGAM",
     problem:
-      "Fantasy baseball usually stops at picking players. Dominus simulates games from real-world performance data, so managers make decisions that play out like they would on a real club.",
+      "Fantasy baseball that simulates games from real-world performance data, so managers' decisions play out like they would on a real club.",
     architecture: [
-      "I architected it from the ground up and built all of the infrastructure.",
-      "A serverless API sits in front of TimescaleDB, which stores the time-series player performance data the simulation runs on.",
-      "A React front end on Node.js services.",
-      "A feature-rich, real-time instant messaging system, built from scratch rather than bought.",
+      "Architected from the ground up, including all infrastructure.",
+      "A serverless API over TimescaleDB, a React front end, and real-time messaging built in-house.",
     ],
     stack: ["React", "Node.js", "TimescaleDB", "Serverless API", "Terraform"],
-    result:
-      "A ground-up platform I architected, one of the three production applications I own as senior engineer.",
+    result: "One of the three production applications I own as senior engineer.",
   },
   {
     id: "jhrea",
     name: "JHREA agent insights",
     client: "JHREA",
     problem:
-      "High-end real estate agents wanted buyer metrics and insights on their listings inside a social-media-style platform, plus something they could hand to clients.",
+      "High-end real estate agents wanted buyer metrics on their listings in a social-style platform, plus something to hand clients.",
     architecture: [
-      "Scheduled cron jobs on EC2, written in Bash and Python, pull in and digest real estate data.",
-      "The digests feed a large React application.",
-      "Python and Plotly generate downloadable one-sheets so agents get a digest for each of their properties.",
+      "Bash and Python cron jobs on EC2 digest real estate data for a large React app.",
+      "Python and Plotly generate a downloadable one-sheet for each property.",
     ],
     stack: ["React", "Python", "Plotly", "Bash", "AWS EC2"],
-    result:
-      "A large-scale platform delivering buyer metrics to agents, with one-click property one-sheets they can share.",
+    result: "Buyer metrics for agents, with one-click property one-sheets they can share.",
   },
 ];
 
