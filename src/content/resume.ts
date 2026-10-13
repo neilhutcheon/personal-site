@@ -188,19 +188,18 @@ export const projects: Project[] = [
   },
   {
     id: "whiteflag",
-    name: "WhiteFlag: Rownd to SuperTokens",
+    name: "WhiteFlag: C# sign-in, Xamarin to SuperTokens",
     client: "WhiteFlag",
-    period: "2026",
     problem:
-      "Rownd, the sign-in service behind WhiteFlag's .NET MAUI app and API, was shutting down, and the drop-in SuperTokens wrapper was a beta that needed a .NET 10 upgrade.",
+      "WhiteFlag's C# mobile app and ASP.NET API needed sign-in that would last through a move from Xamarin to .NET MAUI and, in 2026, the shutdown of Rownd, their sign-in provider.",
     architecture: [
-      "Stayed on .NET 9 and owned sign-in: a Node auth server on supertokens-node, codes by text via Twilio.",
-      "Runs on ECS Fargate behind the existing load balancers; users keep their Rownd IDs, so no data changes.",
-      "The API verifies SuperTokens tokens; the app's Rownd SDK is replaced with native sign-in screens.",
+      "Implemented the original Rownd sign-in in C#, then ported it from Xamarin to .NET MAUI.",
+      "When Rownd shut down, stayed on .NET 9 rather than take a beta wrapper that needed .NET 10: a Node auth server on supertokens-node, codes by text via Twilio, on ECS Fargate.",
+      "The API verifies SuperTokens tokens and the app gets native sign-in screens; users keep their Rownd IDs, so no data changes.",
     ],
-    stack: [".NET MAUI", "ASP.NET", "Node.js", "SuperTokens", "Twilio", "AWS Fargate", "Claude Code"],
+    stack: ["C#", ".NET MAUI", "Xamarin", "ASP.NET", "Node.js", "SuperTokens", "Twilio", "AWS Fargate", "Claude Code"],
     result:
-      "Production sign-in moved about a week after the go decision, with Claude Code doing the hands-on work under my direction.",
+      "I've owned WhiteFlag's sign-in from Xamarin to MAUI to SuperTokens. The final move reached production about a week after the go decision, with Claude Code doing the hands-on work under my direction.",
   },
   {
     id: "jhrea",
@@ -218,9 +217,9 @@ export const projects: Project[] = [
 ];
 
 export const skillGroups = [
-  { name: "Languages", items: ["TypeScript", "JavaScript", "Python", "Bash"] },
-  { name: "Front end", items: ["React", "Next.js", "React Native", ".NET MAUI", "PWAs", "Three.js", "Mapbox"] },
-  { name: "Back end", items: ["Node.js", "Supabase", "Serverless APIs", "Real-time messaging", "Resend", "Pandas", "Plotly"] },
+  { name: "Languages", items: ["TypeScript", "JavaScript", "Python", "C#", "Bash"] },
+  { name: "Front end", items: ["React", "Next.js", "React Native", ".NET MAUI", "Xamarin", "PWAs", "Three.js", "Mapbox"] },
+  { name: "Back end", items: ["Node.js", "ASP.NET", "Supabase", "Serverless APIs", "Real-time messaging", "Resend", "Pandas", "Plotly"] },
   { name: "Databases", items: ["PostgreSQL", "TimescaleDB", "DynamoDB", "MongoDB"] },
   {
     name: "AWS",
