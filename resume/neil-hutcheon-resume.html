@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Neil Hutcheon — Resume</title>
 <style>
-@page { size: letter; margin: 0.45in 0.6in; }
+@page { size: letter; margin: 0.4in 0.6in; }
 * { box-sizing: border-box; }
-body { margin: 0; font-family: "Liberation Sans", Arial, Helvetica, sans-serif; color: #1f2933; font-size: 9.6pt; line-height: 1.32; }
+body { margin: 0; font-family: "Liberation Sans", Arial, Helvetica, sans-serif; color: #1f2933; font-size: 9.6pt; line-height: 1.28; }
 h1 { margin: 0; font-size: 20pt; letter-spacing: 0.06em; color: #1f2a3c; }
 .contact { margin-top: 4px; color: #4a5560; font-size: 9pt; }
 .contact a { color: inherit; text-decoration: none; }
@@ -17,12 +17,15 @@ p { margin: 0; }
 ul { margin: 3px 0 0; padding-left: 14px; }
 li { margin: 1px 0; }
 ul ul { list-style: circle; }
+.skills { border-collapse: collapse; }
+.skills th { text-align: left; padding: 1px 12px 1px 0; white-space: nowrap; color: #1f2a3c; vertical-align: top; }
+.skills td { padding: 1px 0; }
 </style></head><body>
 <h1>NEIL HUTCHEON</h1>
 <div class="contact">Minneapolis, MN<span class="sep">|</span><a href="mailto:neil.hutcheon@gmail.com">neil.hutcheon@gmail.com</a><span class="sep">|</span><a href="https://neilhutcheon.dev">neilhutcheon.dev</a><span class="sep">|</span><a href="https://github.com/neilhutcheon">github.com/neilhutcheon</a><span class="sep">|</span><a href="https://www.linkedin.com/in/neil-hutcheon-1a4a36182/">LinkedIn</a></div>
 
 <h2>SUMMARY</h2>
-<p>Senior Software Engineer with 5+ years of experience building production web applications and data/media pipelines, promoted from Junior Engineer to Senior Engineer through consistent technical growth. Specializes in React/Node, Python, AWS, and Terraform-managed infrastructure, with recent focus on ground-up architecture and technical leadership. Outside client work, founded Descant LLC and built Descant, a marketplace connecting Twin Cities church music directors with freelance musicians.</p>
+<p>Senior Software Engineer with 5+ years of experience building production web applications and data/media pipelines, promoted from Junior Engineer to Senior Engineer through consistent technical growth. React has been home base for five years, written entirely in TypeScript for the last two, alongside Node, C#/.NET, Python, PostgreSQL, and AWS serverless infrastructure managed with Terraform. Seeking a primarily hands-on development role; building things is the part of the job I enjoy most. Outside client work, founded Descant LLC and built Descant, a marketplace connecting Twin Cities church music directors with freelance musicians.</p>
 
 <h2>EXPERIENCE</h2>
 <div class="role"><div class="role-head"><span>Senior Software Engineer — Curve10 LLC</span><span class="when">Early 2025 – Present</span></div>
@@ -39,8 +42,7 @@ ul ul { list-style: circle; }
 <li>JHREA — a large-scale, social-media-style platform for high-end real estate agents, delivering buyer metrics and insights</li>
 <li>University of Michigan — architected a data pipeline for AI-driven analysis of classroom video, automatically generating teacher feedback while maintaining full FERPA compliance</li>
 </ul></li>
-<li>Operated within agile methodologies to deliver work on schedule</li>
-<li>Integrated and troubleshot SaaS tooling to resolve complex technical issues, ensuring seamless feature integration</li>
+<li>Delivered on schedule within agile methodologies; integrated and troubleshot SaaS tooling to resolve complex technical issues</li>
 </ul></div>
 <div class="role"><div class="role-head"><span>Junior Software Engineer (Full-Time) — Curve10 LLC</span><span class="when">Late 2021 – 2023</span></div>
 <ul>
@@ -60,12 +62,18 @@ ul ul { list-style: circle; }
 <li>Built director workflows to post gigs, review applicants’ references and ratings, book players, and share private invite links, plus a music library that gives each booked player their own part and a group thread per gig</li>
 </ul></div>
 
-<div class="role"><div class="role-head"><span>WhiteFlag sign-in — Curve10 LLC client</span><span class="when">C# / .NET</span></div>
+<div class="role"><div class="role-head"><span>WhiteFlag — Curve10 LLC client</span><span class="when">C# / .NET</span></div>
 <ul>
-<li>Implemented the original Rownd sign-in for WhiteFlag’s C# mobile app and ASP.NET API, then ported it from Xamarin to .NET MAUI</li>
+<li>Ported WhiteFlag’s C# mobile app from Xamarin to the newer .NET MAUI framework</li>
+<li>Did extensive API development on the app’s .NET back end (ASP.NET), including the original Rownd sign-in</li>
 <li>When Rownd shut down in 2026, moved production sign-in to SuperTokens in about a week, with no user data changes</li>
 </ul></div>
 
 <h2>SKILLS</h2>
-<p>JavaScript (React, Node) &nbsp;•&nbsp; C# (.NET MAUI, Xamarin, ASP.NET) &nbsp;•&nbsp; Python (Pandas, Plotly) &nbsp;•&nbsp; AWS &nbsp;•&nbsp; Terraform &nbsp;•&nbsp; Supabase &nbsp;•&nbsp; Mapbox &nbsp;•&nbsp; Cloudflare &nbsp;•&nbsp; Linux &nbsp;•&nbsp; Git &nbsp;•&nbsp; Docker</p>
+<table class="skills">
+<tr><th>Front end</th><td>React (5 years) &nbsp;•&nbsp; TypeScript &nbsp;•&nbsp; TanStack (React Query and tooling) &nbsp;•&nbsp; React Router &nbsp;•&nbsp; PWAs</td></tr>
+<tr><th>Back end</th><td>Node &nbsp;•&nbsp; C# / .NET (ASP.NET APIs, .NET MAUI, Xamarin) &nbsp;•&nbsp; Python (Pandas, Plotly)</td></tr>
+<tr><th>Cloud &amp; infra</th><td>AWS (extensive Lambda) &nbsp;•&nbsp; Azure (Azure Functions) &nbsp;•&nbsp; Terraform &nbsp;•&nbsp; Cloudflare &nbsp;•&nbsp; Docker &nbsp;•&nbsp; Linux &nbsp;•&nbsp; Git</td></tr>
+<tr><th>Data &amp; testing</th><td>SQL &nbsp;•&nbsp; PostgreSQL &nbsp;•&nbsp; Sequelize ORM &nbsp;•&nbsp; Supabase &nbsp;•&nbsp; Jest (back end) &nbsp;•&nbsp; Playwright (front end)</td></tr>
+</table>
 </body></html>

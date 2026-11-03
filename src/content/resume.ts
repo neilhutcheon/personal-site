@@ -218,14 +218,14 @@ export const projects: Project[] = [
 
 export const skillGroups = [
   { name: "Languages", items: ["TypeScript", "JavaScript", "Python", "C#", "Bash"] },
-  { name: "Front end", items: ["React", "Next.js", "React Native", ".NET MAUI", "Xamarin", "PWAs", "Three.js", "Mapbox"] },
+  { name: "Front end", items: ["React", "TanStack Query", "React Router", "Next.js", "React Native", ".NET MAUI", "Xamarin", "PWAs", "Three.js", "Mapbox"] },
   { name: "Back end", items: ["Node.js", "ASP.NET", "Supabase", "Serverless APIs", "Real-time messaging", "Resend", "Pandas", "Plotly"] },
-  { name: "Databases", items: ["PostgreSQL", "TimescaleDB", "DynamoDB", "MongoDB"] },
+  { name: "Databases", items: ["PostgreSQL", "SQL", "Sequelize", "TimescaleDB", "DynamoDB", "MongoDB"] },
   {
     name: "AWS",
     items: ["Lambda", "ECS", "EC2", "S3", "CloudFront", "SQS", "Step Functions", "VPC"],
   },
-  { name: "Infrastructure", items: ["Terraform (multi-environment)", "Docker", "Cloudflare", "Linux", "GitHub Actions", "Git"] },
+  { name: "Infrastructure", items: ["Terraform (multi-environment)", "Azure Functions", "Docker", "Cloudflare", "Linux", "GitHub Actions", "Git"] },
   { name: "Testing", items: ["Jest", "Playwright", "Vitest"] },
   { name: "AI tooling", items: ["Claude Code", "Cursor", "Google Antigravity", "AI video pipelines"] },
 ] as const;
