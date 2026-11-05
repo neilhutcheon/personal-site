@@ -15,6 +15,7 @@ each with a small interactive toy:
 - [Framer Motion](https://motion.dev) for scroll and interaction animation
 - [three.js](https://threejs.org) for the climbing gym
 - [Vitest](https://vitest.dev) for unit tests of the hobby logic
+- [Playwright](https://playwright.dev) for end-to-end tests against the static export
 
 ## Run it locally
 
@@ -28,7 +29,9 @@ npm run dev        # http://localhost:4317
 Other scripts:
 
 ```bash
-npm test           # unit tests (tests/)
+npm test           # unit tests (tests/lib, Vitest)
+npm run test:e2e   # end-to-end tests (tests/e2e, Playwright; builds the site first)
+                   # first run only: npx playwright install chromium
 npm run lint       # ESLint
 npm run build      # production build
 npm start          # serve the production build on port 4317
@@ -67,6 +70,7 @@ src/
   lib/                 # pure logic: disc-flight, climbing, trombone
 public/photos/         # Neil's photos (EXIF stripped, resized)
 tests/lib/             # Vitest tests mirroring src/lib
+tests/e2e/             # Playwright tests of the built site (desktop + mobile)
 ```
 
 ## Editing content
